@@ -1,0 +1,28 @@
+{
+  "name": "freeosenior-backend",
+  "version": "1.0.0",
+  "description": "a learning platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Unknown39825/FreeOSenior-BackEnd.git"
+  },
+  "author": "chetan,harshit,paras,nayan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Unknown39825/FreeOSenior-BackEnd/issues"
+  },
+  "homepage": "https://github.com/Unknown39825/FreeOSenior-BackEnd#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.12.2",
+    "nodemon": "^2.0.7"
+  }
+}
