@@ -8,6 +8,7 @@ const cors = require("cors");
 
 // my routes
 const contributorRoutes =require('./routes/HomePage/contributor');
+const homecardRoutes= require('./routes/HomePage/homecard');
 
 //DB Connection
 mongoose
@@ -27,6 +28,7 @@ app.use(cors());
 
 //My Routes
 app.use("/api",contributorRoutes);
+app.use("/api",homecardRoutes);
 
 const port = process.env.PORT || 8000;
 
