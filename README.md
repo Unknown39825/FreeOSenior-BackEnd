@@ -12,3 +12,18 @@ npm install
 npm test
 ```
 
+### To Start Testing Frontend
+
+
+```
+cd TestFront
+```
+
+
+```
+npm i
+```
+
+```
+npm starts
+```
