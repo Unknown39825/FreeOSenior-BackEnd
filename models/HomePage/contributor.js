@@ -7,7 +7,7 @@ const contributorSchema=mongoose.Schema({
     },
     image: {
         type: String,
-        required: false
+        
     },
     count: {
         type: Number,

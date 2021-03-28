@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 // my routes
+const contributorRoutes =require('./routes/HomePage/contributor');
 
 //DB Connection
 mongoose
@@ -25,6 +26,7 @@ app.use(cookieParser());
 app.use(cors());
 
 //My Routes
+app.use("/api",contributorRoutes);
 
 const port = process.env.PORT || 8000;
 
