@@ -17,6 +17,11 @@ const projectSchema=mongoose.Schema({
          type: String,
          required: true
     },
+    likes: {             //likes counter on project/notes
+        type: Number,     
+        default: 0 ,      //initially set to zero
+        required: false
+    },
     sem : {
         type: Number,
         required: true,
