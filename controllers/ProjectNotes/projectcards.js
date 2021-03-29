@@ -1,5 +1,4 @@
 const { json } = require("body-parser");
-const projectcard = require("../../models/ProjectNotes/projectcard");
 const ProjectCard = require("../../models/ProjectNotes/projectcard");
 
 //create projectcard

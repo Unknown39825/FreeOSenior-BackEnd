@@ -7,11 +7,16 @@ const tutorialSchema=mongoose.Schema({
     },
     link: {
         type: String,
-        required: false
+        required: true
     },
     category: {
         type: String,
         required: true
+    },
+    likes: {
+        type: Number,
+        default: 0,
+        required: false
     }
 },
 {

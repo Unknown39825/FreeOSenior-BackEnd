@@ -12,6 +12,7 @@ const homecardRoutes= require('./routes/HomePage/homecard');
 const eventRoutes= require('./routes/HomePage/event');
 const WorkshopRoutes= require('./routes/HomePage/workshop');
 const projectcardRoutes = require('./routes/ProjectNotes/projectcard');
+const tutorialRoutes = require('./routes/Tutorials/tutorial');
 
 //DB Connection
 mongoose
@@ -35,6 +36,7 @@ app.use("/api",homecardRoutes);
 app.use("/api",eventRoutes);
 app.use("/api",WorkshopRoutes);
 app.use("/api",projectcardRoutes);
+app.use("/api",tutorialRoutes);
 
 const port = process.env.PORT || 8000;
 
