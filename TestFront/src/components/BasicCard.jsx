@@ -1,7 +1,5 @@
 import React from 'react';
-import { Button, Card, Spinner } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import LoadingButton from './LoadingButton';
+import { Button, Card} from 'react-bootstrap';
 export default function BasicCard(
     {
       title=undefined,

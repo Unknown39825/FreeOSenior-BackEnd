@@ -8,7 +8,6 @@ export default function Events() {
 
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [bload, setbload] = useState(false);
     
      useEffect(() => {
 
