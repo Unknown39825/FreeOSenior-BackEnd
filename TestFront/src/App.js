@@ -1,16 +1,16 @@
 import react from 'react';
 import './App.css';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Route, Router, Switch } from 'react-router-dom';
-import AllBlogs from './components/AllBlogs';
+import AllEvents from './components/AllEvents';
+import AllWorkshops from './components/AllWorkshops';
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        
         <Switch>
-          <Route path="/" component={AllBlogs} />
+          <Route path="/Events" component={AllEvents} />
+          <Route path="/workshops" component={AllWorkshops} />
         </Switch>
       </BrowserRouter>
     </div>

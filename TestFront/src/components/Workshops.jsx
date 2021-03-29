@@ -1,14 +1,12 @@
 import React, { useEffect,useState } from "react";
 import axios from "axios";
-import BlogCard from "./BlogCard";
+import BasicCard from "./BasicCard";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
 // import { Col, Row } from "react-bootstrap";
 
-export default function Blogs(props) {
+export default function Events() {
 
-    console.log(props);
     const [blogs, setBlogs] = useState([]);
-
     const [loading, setLoading] = useState(true);
     const [bload, setbload] = useState(false);
     
@@ -16,9 +14,8 @@ export default function Blogs(props) {
 
        const dataFetch = async ()=>{
            try{
-                const res=await axios.get("http://127.0.0.1:8000/api/event");
-                // console.log("hello");
-                console.log(res);
+                const res=await axios.get("http://127.0.0.1:8000/api/workshop");
+
                 if(res.data)
                 {
                     setBlogs(res.data);
@@ -58,7 +55,7 @@ export default function Blogs(props) {
                     <>
                     {blogs.map((blog)=>(
                         <Col lg='6' sm='12' >
-                        <BlogCard blog={blog} read={true} loading={bload} />
+                        <BasicCard image={blog.imglink}  title={blog.title} link= {blog.author} desc={blog.desc} date = {blog.date} />
                         </Col>
                     ))
                     
@@ -70,7 +67,7 @@ export default function Blogs(props) {
                 (
                     <>
                         <Col lg='12'>
-                       <BlogCard/>
+                       <BasicCard/>
                         </Col>
 
                     </>
