@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { Col, Container, Row } from "react-bootstrap";
-import Blogs from './Blogs';
+import Events from './Events';
+import CreateEvent from "./CreateEvent";
 
-export default function AllBlogs() {
+export default function AllEvents() {
     return (
        <Container >
-           <Blogs/>
-            
+           <Events/>
+           <CreateEvent/>
         </Container>
     )
 }

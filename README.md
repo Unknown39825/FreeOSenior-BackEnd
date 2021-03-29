@@ -27,3 +27,7 @@ npm i
 ```
 npm starts
 ```
+
+### To Start Testing Frontend 
+ 
+in the all blogs page select the file then upload and on submitting you will get the cdn url in the paragraph.

@@ -2,7 +2,7 @@ const Contributor = require("../../models/HomePage/contributor");
 
 // create a contributor
 exports.createContributor = (req,res)=>{
-
+    
     const contributor= new Contributor(req.body);
     contributor.save((err,data)=>{
         if(err)
