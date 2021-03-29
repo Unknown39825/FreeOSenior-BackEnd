@@ -22,7 +22,7 @@ exports.getContributors = (req,res)=>{
         if(err)
         {
             return res.status(400).json({
-                error:"no contributor found"
+                error: "no contributor found"
             })
         }
 
@@ -32,8 +32,7 @@ exports.getContributors = (req,res)=>{
 };
 
 // update the contributors by increasing the contribution count
-exports.updateContributors = async (req,res) => {
-    
+exports.updateContributors = async (req,res) =>{    
     try{
         
         const  contributor = await Contributor.findById(req.params.contId);

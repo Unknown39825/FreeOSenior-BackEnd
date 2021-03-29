@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
-const noteSchema=mongoose.Schema({
+const projectSchema=mongoose.Schema({
     imglink: {
         type: String,
         required: false
     },
-    name:{
+    title:{
         type: String,
         required: true
     },
@@ -27,4 +27,4 @@ const noteSchema=mongoose.Schema({
     timestamps: true
 });
 
-module.exports=mongoose.model('NoteCard',noteSchema);
+module.exports=mongoose.model('ProjectCard',projectSchema);
