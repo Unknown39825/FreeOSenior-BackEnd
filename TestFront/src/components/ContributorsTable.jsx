@@ -3,7 +3,7 @@ import axios from "axios";
 import Table from 'react-bootstrap/Table';
 import { Link } from 'react-router-dom';
 import { Button } from "react-bootstrap";
-
+import config from "../config.json"
 const ContributorTables = () => {
 
    const [contributors, setcontributors] = useState([]);
@@ -13,7 +13,7 @@ const ContributorTables = () => {
      let id= event.target.value;
     //  console.log(event.target.value);
     try{
-      const res = await axios.delete(`http://127.0.0.1:8000/api/contributor/${id}`);
+      const res = await axios.delete(`${config.BASE}/contributor/${id}`);
       if(res.data)
       {
         window.alert("delted");
@@ -33,7 +33,7 @@ const ContributorTables = () => {
      useEffect(() => {
        const dataFetch = async ()=>{
            try{
-                const res=await axios.get("http://127.0.0.1:8000/api/contributor");
+                const res=await axios.get(`${config.BASE}/contributor`);
 
                 if(res.data)
                 {

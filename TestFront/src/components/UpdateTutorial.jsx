@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, {  useState ,useEffect} from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
 import { Redirect } from 'react-router-dom';
+import config from "../config.json"
 
 // import config from "../config.json";
 export default function Updatetutorial(props) 
@@ -26,7 +27,7 @@ export default function Updatetutorial(props)
        const dataFetch = async ()=>{
            
            try{
-                const res=await axios.get(`http://127.0.0.1:8000/api/tutorial/${id}`);
+                const res=await axios.get(`${config.BASE}/tutorial/${id}`);
                 // console.log("hello");
                 console.log(res.data);
                 if(res.data)
@@ -80,7 +81,7 @@ export default function Updatetutorial(props)
             
             try{
 
-            const res= await axios.put( `http://127.0.0.1:8000/api/tutorial/${id}` ,tutorialPost  );
+            const res= await axios.put( `${config.BASE}/tutorial/${id}` ,tutorialPost  );
             console.log(res.data);
             setCreated(true);
         }catch(err){
@@ -91,7 +92,7 @@ export default function Updatetutorial(props)
         else
         {
              try{
-            const res= await axios.post( "http://127.0.0.1:8000/api/tutorial" , tutorialPost  );
+            const res= await axios.post( `${config.BASE}/tutorial` , tutorialPost  );
             console.log(res.data);
             setCreated(true);
         }catch(err){

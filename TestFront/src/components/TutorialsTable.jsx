@@ -3,6 +3,7 @@ import axios from "axios";
 import Table from 'react-bootstrap/Table';
 import { Link } from 'react-router-dom';
 import { Button } from "react-bootstrap";
+import config from "../config.json"
 
 const TurtorialTables = () => {
 
@@ -13,7 +14,7 @@ const TurtorialTables = () => {
      let id= event.target.value;
     //  console.log(event.target.value);
     try{
-      const res = await axios.delete(`http://127.0.0.1:8000/api/tutorial/${id}`);
+      const res = await axios.delete(`${config.BASE}/tutorial/${id}`);
       if(res.data)
       {
         window.alert("delted");
@@ -33,7 +34,7 @@ const TurtorialTables = () => {
      useEffect(() => {
        const dataFetch = async ()=>{
            try{
-                const res=await axios.get("http://127.0.0.1:8000/api/tutorial");
+                const res=await axios.get(`${config.BASE}/tutorial`);
 
                 if(res.data)
                 {

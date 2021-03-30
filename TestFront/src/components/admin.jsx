@@ -16,12 +16,7 @@ const admin = () => {
             <ProjectCardsTable/>
             <TutorialsTable/>
 
-            {/* TODO: create and update contributors api
-                TODO: create and update project card
-                TODO: find by id in the backend
-                FIXME: NAMING 
-            
-            */}
+                {/* FIXME: NAMING  */}
             
         </div>
     );

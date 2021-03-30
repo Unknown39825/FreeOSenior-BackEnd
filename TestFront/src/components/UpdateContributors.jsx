@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, {  useState ,useEffect} from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
 import { Redirect } from 'react-router-dom';
+import config from "../config.json"
 
 // import config from "../config.json";
 export default function Updatecontributor(props) 
@@ -26,7 +27,7 @@ export default function Updatecontributor(props)
        const dataFetch = async ()=>{
            
            try{
-                const res=await axios.get(`http://127.0.0.1:8000/api/contributor/${id}`);
+                const res=await axios.get(`${config.BASE}/contributor/${id}`);
                 // console.log("hello");
                 console.log(res.data);
                 if(res.data)
@@ -80,7 +81,7 @@ export default function Updatecontributor(props)
             
             try{
 
-            const res= await axios.put( `http://127.0.0.1:8000/api/contributor/${id}` ,contributorPost  );
+            const res= await axios.put( `${config.BASE}/contributor/${id}` ,contributorPost  );
             console.log(res.data);
             setCreated(true);
         }catch(err){
@@ -92,7 +93,7 @@ export default function Updatecontributor(props)
         {
             console.log("hello");
              try{
-            const res= await axios.post("http://127.0.0.1:8000/api/contributor" , contributorPost  );
+            const res= await axios.post(`${config.BASE}/contributor` , contributorPost  );
             console.log(res.data);
             setCreated(true);
         }catch(err){

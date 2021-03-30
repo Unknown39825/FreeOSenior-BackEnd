@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, {  useState ,useEffect} from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
 import { Redirect } from 'react-router-dom';
+import config from "../config.json"
 
 // import config from "../config.json";
 export default function UpdateWorkshop(props) {
@@ -26,7 +27,7 @@ export default function UpdateWorkshop(props) {
        const dataFetch = async ()=>{
            
            try{
-                const res=await axios.get(`http://127.0.0.1:8000/api/projectcard/${id}`);
+                const res=await axios.get(`${config.BASE}/projectcard/${id}`);
                 // console.log("hello");
                 console.log(res.data);
                 if(res.data)
@@ -79,7 +80,7 @@ export default function UpdateWorkshop(props) {
             
             try{
 
-            const res= await axios.put( `http://127.0.0.1:8000/api/projectcard/${id}` ,EventPost  );
+            const res= await axios.put( `${config.BASE}/projectcard/${id}` ,EventPost  );
             console.log(res.data);
             setCreated(true);
         }catch(err){
@@ -91,7 +92,7 @@ export default function UpdateWorkshop(props) {
         {
             console.log("create api called");
              try{
-            const res= await axios.post( "http://127.0.0.1:8000/api/projectcard" , EventPost  );
+            const res= await axios.post( `${config.BASE}/projectcard` , EventPost  );
             console.log(res.data);
             setCreated(true);
         }catch(err){
