@@ -38,6 +38,10 @@ app.use("/api",WorkshopRoutes);
 app.use("/api",projectcardRoutes);
 app.use("/api",tutorialRoutes);
 
+app.use("/",(req,res)=>{
+  res.send("welcome to FreeOSenior");
+})
+
 const port = process.env.PORT || 8000;
 
 //Starting a server
