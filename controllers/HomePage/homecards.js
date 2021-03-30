@@ -26,6 +26,16 @@ exports.getHomeCards = (req,res) => {
         return res.status(500).json(err);
     })
 };
+exports.getHomeCardbyId = (req,res) => {
+    HomeCard.findById(req.params.cardId)
+    .then((data) => {
+        res.status(200).json(data);
+    })
+    .catch((err)=>{
+        if(err) 
+        return res.status(500).json(err);
+    })
+};
 
 //update a homecard
 exports.updateHomeCards = async (req,res) => {

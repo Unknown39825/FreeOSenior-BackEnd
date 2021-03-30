@@ -1,12 +1,12 @@
 
 import axios from 'axios';
-import React, {  useState } from 'react'
+import React, {  useState ,useEffect} from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
 import { Redirect } from 'react-router-dom';
 
 // import config from "../config.json";
-export default function CreateWorkshop() {
-
+export default function UpdateWorkshop(props) {
+    let id=props.match.params.id;
     const [EventPost, setEvent] = useState({
         imglink:'',
         title:'',
@@ -19,6 +19,28 @@ export default function CreateWorkshop() {
 
     // const [url, setUrl] = useState("helo");
     const [Data, setData] = useState(undefined);
+
+     useEffect(() => {
+
+       const dataFetch = async ()=>{
+           
+           try{
+                const res=await axios.get(`http://127.0.0.1:8000/api/workshop/${id}`);
+                // console.log("hello");
+                console.log(res.data);
+                if(res.data)
+                {
+                    setEvent(res.data);
+                }
+           }
+           catch(error){
+               console.log(error);
+           }
+       }
+       if(id!=="new")
+       dataFetch();
+
+    },[]);
 
     const uploadImage = async event=>{
         const files = event.target.files;
@@ -51,14 +73,31 @@ export default function CreateWorkshop() {
     }
 
     const postEvent =async() => {
-        try{
+          if(id!=="new")
+        {
+            
+            try{
+
+            const res= await axios.put( `http://127.0.0.1:8000/api/workshop/${id}` ,EventPost  );
+            console.log(res.data);
+            setCreated(true);
+        }catch(err){
+            console.log(err);
+        }
+        window.alert('Workshop Updated');
+        }
+        else
+        {
+            console.log("create api called");
+             try{
             const res= await axios.post( "http://127.0.0.1:8000/api/workshop" , EventPost  );
             console.log(res.data);
             setCreated(true);
         }catch(err){
             console.log(err);
         }
-        window.alert('Workshop created');
+        window.alert('Workshop  created');
+        }
         
     }
 
@@ -67,15 +106,15 @@ export default function CreateWorkshop() {
         {
             postEvent();
         }
-        // else
+        else
         {
-            window.alert("Event details are  empty");
+            window.alert("Workshop details are  empty");
         }
     }
 
     if(created)
     {
-        return <Redirect to="/workshops"></Redirect>
+        return <Redirect to="/"></Redirect>
     }
 
     console.log(EventPost);
@@ -83,7 +122,7 @@ export default function CreateWorkshop() {
     return (
         <Container>
             <div>
-             <h1 className="bg-dark m-2 text-white p-2 rounded">Create a new Workshop</h1>
+             <h1 className="bg-dark m-2 text-white p-2 rounded">{ id!=="new" ? ("update"): ("create")  } Workshop</h1>
              <Form className="text-left m-2 p-5 text-white bg-dark rounded mt-5">
 
                  <Form.Group controlId="">
@@ -106,6 +145,12 @@ export default function CreateWorkshop() {
                 <Form.Control className="input" type="date" name="date" value={EventPost.date} onChange={handleChange}  placeholder="" />
             </Form.Group>
 
+             <Form.Group controlId="">
+                <Form.Label><b>Image Preview</b></Form.Label>
+                <br/>
+                <img src={EventPost.imglink} height="100" width="auto" alt="image preview"/>
+            </Form.Group>
+
             <div className="test">
             <input type="file" name="file" placeholder="upload a image" onChange={uploadImage} />
             <br/>
@@ -113,7 +158,7 @@ export default function CreateWorkshop() {
             
             </div>
                 
-            <Button variant="primary" onClick={onSubmit}>Create a Workshop</Button>
+            <Button variant="primary" onClick={onSubmit}>{ id!=="new" ? ("update"): ("create")  } </Button>
             
             </Form>
         </div>

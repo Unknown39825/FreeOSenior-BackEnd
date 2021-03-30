@@ -1,11 +1,13 @@
 
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
 import { Redirect } from 'react-router-dom';
 
 // import config from "../config.json";
-export default function CreateEvent() {
+export default function EventUpdate(props) {
+    let id=props.match.params.id;
+    console.log(id);
 
     const [EventPost, setEvent] = useState({
         img:'',
@@ -17,6 +19,28 @@ export default function CreateEvent() {
 
     // const [url, setUrl] = useState("helo");
     const [Data, setData] = useState(undefined);
+
+    useEffect(() => {
+
+       const dataFetch = async ()=>{
+           
+           try{
+                const res=await axios.get(`http://127.0.0.1:8000/api/event/${id}`);
+                // console.log("hello");
+                console.log(res.data);
+                if(res.data)
+                {
+                    setEvent(res.data);
+                }
+           }
+           catch(error){
+               console.log(error);
+           }
+       }
+       if(id!=="new")
+       dataFetch();
+
+    },[]);
 
     const uploadImage = async event=>{
         const files = event.target.files;
@@ -48,19 +72,38 @@ export default function CreateEvent() {
         })
     }
 
-    const postEvent =async() => {
-        try{
+     const postEvent =async() => {
+
+        if(id!=="new")
+        {
+            
+            try{
+
+            const res= await axios.put( `http://127.0.0.1:8000/api/event/${id}` ,EventPost  );
+            console.log(res.data);
+            setCreated(true);
+        }catch(err){
+            console.log(err);
+        }
+        window.alert('Event Updated');
+        }
+        else
+        {
+            console.log("create api called");
+             try{
             const res= await axios.post( "http://127.0.0.1:8000/api/event" , EventPost  );
             console.log(res.data);
             setCreated(true);
         }catch(err){
             console.log(err);
         }
-        window.alert('Event created');
+        window.alert('event  created');
+        }
         
     }
 
     const onSubmit =(e) => {
+        e.preventDefault();
         if(EventPost.title.trim() !== ""  && EventPost.link.trim() !== ""  && EventPost.img.trim() !== "" ){
             postEvent();
         }else{
@@ -70,7 +113,7 @@ export default function CreateEvent() {
 
     if(created)
     {
-        return <Redirect to="/events"></Redirect>
+        return <Redirect to="/"></Redirect>
     }
 
     console.log(EventPost);
@@ -78,16 +121,25 @@ export default function CreateEvent() {
     return (
         <Container>
             <div>
-             <h1 className="bg-dark m-2 text-white p-2 rounded">Create a new Event</h1>
+             <h1 className="bg-dark m-2 text-white p-2 rounded">{ id!=="new" ? ("update"): ("create")  }  Event</h1>
+
              <Form className="text-left m-2 p-5 text-white bg-dark rounded mt-5">
                  <Form.Group controlId="">
                 <Form.Label><b>Title of Event</b></Form.Label> 
                     <Form.Control className="input" type="text" name="title" value={EventPost.title} onChange={handleChange} placeholder="" />
                 </Form.Group>
+
             <Form.Group controlId="">
                 <Form.Label><b>Event Link</b></Form.Label>
                 <Form.Control className="input"type="text" name="link" value={EventPost.link} onChange={handleChange}  placeholder="" />
             </Form.Group>
+
+            <Form.Group controlId="">
+                <Form.Label><b>Image Preview</b></Form.Label>
+                <br/>
+                <img src={EventPost.img} height="100" width="auto" alt={EventPost.title}/>
+            </Form.Group>
+
             <div className="test">
             <input type="file" name="file" placeholder="upload a image" onChange={uploadImage} />
             <br/>
@@ -95,7 +147,7 @@ export default function CreateEvent() {
             
             </div>
                 
-            <Button variant="primary" onClick={onSubmit}>Create a Event</Button>
+            <Button variant="primary" onClick={onSubmit}>{ id!=="new" ? ("update"): ("create")  }Event</Button>
             
             </Form>
         </div>
