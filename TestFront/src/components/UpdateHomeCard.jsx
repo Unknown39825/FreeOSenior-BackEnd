@@ -1,18 +1,19 @@
 
 import axios from 'axios';
-import React, { useState, useEffect } from 'react'
+import React, {  useState ,useEffect} from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
 import { Redirect } from 'react-router-dom';
 
 // import config from "../config.json";
-export default function EventUpdate(props) {
+export default function UpdateHomecard(props) 
+{
     let id=props.match.params.id;
-    console.log(id);
 
-    const [EventPost, setEvent] = useState({
-        img:'',
+    const [HomecardPost, setHomecard] = useState({
+        imglink:'',
         title:'',
-        link:''
+        seemore:'',
+        desc:'',
     });
 
     const [created, setCreated] = useState(false);
@@ -20,17 +21,17 @@ export default function EventUpdate(props) {
     // const [url, setUrl] = useState("helo");
     const [Data, setData] = useState(undefined);
 
-    useEffect(() => {
+      useEffect(() => {
 
        const dataFetch = async ()=>{
            
            try{
-                const res=await axios.get(`http://127.0.0.1:8000/api/event/${id}`);
+                const res=await axios.get(`http://127.0.0.1:8000/api/homecard/${id}`);
                 // console.log("hello");
                 console.log(res.data);
                 if(res.data)
                 {
-                    setEvent(res.data);
+                    setHomecard(res.data);
                 }
            }
            catch(error){
@@ -59,55 +60,55 @@ export default function EventUpdate(props) {
         });
         const file = await res.json();
         // await setUrl(file.secure_url);
-        await setEvent({
-            ...EventPost,
-            img:file.secure_url
+        await setHomecard({
+            ...HomecardPost,
+            imglink:file.secure_url
         })
     }
 
     const handleChange = (e) => {
-        setEvent({
-            ...EventPost,
+        setHomecard({
+            ...HomecardPost,
             [e.target.name]: e.target.value
         })
     }
 
-     const postEvent =async() => {
-
+    const postEvent =async() => {
+        
         if(id!=="new")
         {
-            
             try{
-
-            const res= await axios.put( `http://127.0.0.1:8000/api/event/${id}` ,EventPost  );
+            const res= await axios.put( `http://127.0.0.1:8000/api/homecard/${id}` ,HomecardPost  );
             console.log(res.data);
             setCreated(true);
         }catch(err){
             console.log(err);
         }
-        window.alert('Event Updated');
+        window.alert('Homecard Updted');
+
         }
         else
         {
-            console.log("create api called");
-             try{
-            const res= await axios.post( "http://127.0.0.1:8000/api/event" , EventPost  );
+            try{
+            const res= await axios.post( "http://127.0.0.1:8000/api/homecard" ,HomecardPost  );
             console.log(res.data);
             setCreated(true);
         }catch(err){
             console.log(err);
         }
-        window.alert('event  created');
+        window.alert('Homecard created');
         }
         
     }
 
     const onSubmit =(e) => {
-        e.preventDefault();
-        if(EventPost.title.trim() !== ""  && EventPost.link.trim() !== ""  && EventPost.img.trim() !== "" ){
+        if(HomecardPost.imglink.trim() !== ""  &&HomecardPost.title.trim() !== ""  &&HomecardPost.desc.trim() !== "" &&HomecardPost.seemore.trim() !== "" )
+        {
             postEvent();
-        }else{
-            window.alert("Event details are  empty");
+        }
+        else
+        {
+            window.alert("Homecard details are  empty");
         }
     }
 
@@ -116,28 +117,33 @@ export default function EventUpdate(props) {
         return <Redirect to="/"></Redirect>
     }
 
-    console.log(EventPost);
+    console.log(HomecardPost);
 
     return (
         <Container>
             <div>
-             <h1 className="bg-dark m-2 text-white p-2 rounded">{ id!=="new" ? ("update"): ("create")  }  Event</h1>
-
+             <h1 className="bg-dark m-2 text-white p-2 rounded">{ id!=="new" ? ("update"): ("create")  } Homecard</h1>
              <Form className="text-left m-2 p-5 text-white bg-dark rounded mt-5">
+
                  <Form.Group controlId="">
-                <Form.Label><b>Title of Event</b></Form.Label> 
-                    <Form.Control className="input" type="text" name="title" value={EventPost.title} onChange={handleChange} placeholder="" />
+                <Form.Label><b>Title of Homecard</b></Form.Label> 
+                    <Form.Control className="input" type="text" name="title" value={HomecardPost.title} onChange={handleChange} placeholder="" />
                 </Form.Group>
 
             <Form.Group controlId="">
-                <Form.Label><b>Event Link</b></Form.Label>
-                <Form.Control className="input"type="text" name="link" value={EventPost.link} onChange={handleChange}  placeholder="" />
+                <Form.Label><b>Homecard seemore link</b></Form.Label>
+                <Form.Control className="input"type="text" name="seemore" value={HomecardPost.seemore} onChange={handleChange}  placeholder="" />
             </Form.Group>
 
             <Form.Group controlId="">
+                <Form.Label><b>Homecard description </b></Form.Label>
+                <Form.Control className="input" type="textarea" name="desc" value={HomecardPost.desc} onChange={handleChange}  placeholder="" />
+            </Form.Group>
+
+              <Form.Group controlId="">
                 <Form.Label><b>Image Preview</b></Form.Label>
                 <br/>
-                <img src={EventPost.img} height="100" width="auto" alt={EventPost.title}/>
+                <img src={HomecardPost.imglink} height="100" width="auto" alt={HomecardPost.title}/>
             </Form.Group>
 
             <div className="test">
@@ -147,7 +153,7 @@ export default function EventUpdate(props) {
             
             </div>
                 
-            <Button variant="primary" onClick={onSubmit}>{ id!=="new" ? ("update"): ("create")  }Event</Button>
+            <Button variant="primary" onClick={onSubmit}>{ id!=="new" ? ("update"): ("create")  } </Button>
             
             </Form>
         </div>

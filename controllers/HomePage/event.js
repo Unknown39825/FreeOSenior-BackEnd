@@ -25,6 +25,17 @@ exports.getEvent = (req, res) => {
     });
 };
 
+//get Event by id
+exports.getEventbyId = (req, res) => {
+  Event.findById(req.params.eventId)
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      if (err) return res.status(500).json(err);
+    });
+};
+
 //update a Event
 exports.updateEvent = async (req, res) => {
   

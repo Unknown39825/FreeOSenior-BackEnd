@@ -3,7 +3,7 @@ const ProjectCard = require("../../models/ProjectNotes/projectcard");
 
 //create projectcard
 exports.createProjectCards = (req,res) => {
-
+    console.log(req.body);
      const projectcard = new ProjectCard(req.body);
      projectcard.save((err,data)=>{
         if(err)
@@ -11,10 +11,10 @@ exports.createProjectCards = (req,res) => {
             error:"Unable to save this card !!",
             desc:err
         })
-        res.json({
-            "msg": "Card Created !!",
-            "desc": data
-        });
+        
+        res.json(
+             data
+        );
     });    
 };
 
@@ -30,10 +30,23 @@ exports.getProjectCards = (req,res) => {
     })
 };
 
+exports.getProjectCardsbyId = (req,res) => {
+    ProjectCard.findById(req.params.cardId)
+    .then((data) => {
+        res.status(200).json(data);
+    })
+    .catch((err)=>{
+        if(err) 
+        return res.status(500).json(err);
+    })
+};
+
 //update a project
 exports.updateProjectCards = async (req,res) => {
+
     if(!req.body.title || !req.body.desc || !req.body.dlink || !req.body.sem)
       return res.status(500).json({"msg":"fill all the fields"});
+      console.log(req.params.cardId)
 
       let card;
     try 
@@ -46,10 +59,8 @@ exports.updateProjectCards = async (req,res) => {
     catch(err) {
         res.status(400).json(err);
     }
-    res.status(202).json({
-        "msg":"Card Updated !!",
-        "desc":card
-    });
+    res.status(202).json(card
+    );
 };
 
 //delete a homecard

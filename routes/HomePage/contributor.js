@@ -1,10 +1,12 @@
 const express= require("express");
-const { createContributor, getContributors, updateContributors } = require("../../controllers/HomePage/contributors");
+const { createContributor, getContributors, updateContributors, getContributorbyid, IncreaseContributor, deleteContributor } = require("../../controllers/HomePage/contributors");
 const router = express.Router();
 
 router.post("/contributor",createContributor);
 router.get("/contributor",getContributors);
 router.put("/contributor/:contId",updateContributors);
-// router.delete("/contributor/:contributorId",deleteContributor);
+router.put("/contributor/increase/:contId", IncreaseContributor);
+router.get("/contributor/:contId",getContributorbyid);
+router.delete("/contributor/:contId",deleteContributor);
 
 module.exports =router;

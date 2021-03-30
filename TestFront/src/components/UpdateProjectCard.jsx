@@ -1,18 +1,19 @@
 
 import axios from 'axios';
-import React, { useState, useEffect } from 'react'
+import React, {  useState ,useEffect} from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
 import { Redirect } from 'react-router-dom';
 
 // import config from "../config.json";
-export default function EventUpdate(props) {
+export default function UpdateWorkshop(props) {
     let id=props.match.params.id;
     console.log(id);
-
     const [EventPost, setEvent] = useState({
-        img:'',
+        imglink:'',
         title:'',
-        link:''
+        dlink:'',
+        desc:'',
+        sem:''
     });
 
     const [created, setCreated] = useState(false);
@@ -20,12 +21,12 @@ export default function EventUpdate(props) {
     // const [url, setUrl] = useState("helo");
     const [Data, setData] = useState(undefined);
 
-    useEffect(() => {
+     useEffect(() => {
 
        const dataFetch = async ()=>{
            
            try{
-                const res=await axios.get(`http://127.0.0.1:8000/api/event/${id}`);
+                const res=await axios.get(`http://127.0.0.1:8000/api/projectcard/${id}`);
                 // console.log("hello");
                 console.log(res.data);
                 if(res.data)
@@ -37,7 +38,7 @@ export default function EventUpdate(props) {
                console.log(error);
            }
        }
-       if(id!=="new")
+       if(id!="new")
        dataFetch();
 
     },[]);
@@ -61,7 +62,7 @@ export default function EventUpdate(props) {
         // await setUrl(file.secure_url);
         await setEvent({
             ...EventPost,
-            img:file.secure_url
+            imglink:file.secure_url
         })
     }
 
@@ -72,42 +73,50 @@ export default function EventUpdate(props) {
         })
     }
 
-     const postEvent =async() => {
-
-        if(id!=="new")
+    const postEvent =async() => {
+          if(id!=="new")
         {
             
             try{
 
-            const res= await axios.put( `http://127.0.0.1:8000/api/event/${id}` ,EventPost  );
+            const res= await axios.put( `http://127.0.0.1:8000/api/projectcard/${id}` ,EventPost  );
             console.log(res.data);
             setCreated(true);
         }catch(err){
             console.log(err);
         }
-        window.alert('Event Updated');
+        window.alert('project Updated');
         }
         else
         {
             console.log("create api called");
              try{
-            const res= await axios.post( "http://127.0.0.1:8000/api/event" , EventPost  );
+            const res= await axios.post( "http://127.0.0.1:8000/api/projectcard" , EventPost  );
             console.log(res.data);
             setCreated(true);
         }catch(err){
             console.log(err);
         }
-        window.alert('event  created');
+        window.alert('Project created');
         }
         
     }
 
     const onSubmit =(e) => {
-        e.preventDefault();
-        if(EventPost.title.trim() !== ""  && EventPost.link.trim() !== ""  && EventPost.img.trim() !== "" ){
+
+        if(EventPost.title.trim() !== ""  && EventPost.desc.trim() !== ""  && EventPost.dlink.trim() !== ""  )
+        {
+            if(Number.isInteger(Number.parseInt(EventPost.sem)))
             postEvent();
-        }else{
-            window.alert("Event details are  empty");
+            else
+            {
+                window.alert("not numeric sem");
+            }
+            
+        }
+        else
+        {
+            window.alert("Project details are  empty");
         }
     }
 
@@ -121,23 +130,33 @@ export default function EventUpdate(props) {
     return (
         <Container>
             <div>
-             <h1 className="bg-dark m-2 text-white p-2 rounded">{ id!=="new" ? ("update"): ("create")  }  Event</h1>
-
+             <h1 className="bg-dark m-2 text-white p-2 rounded">{ id!=="new" ? ("update"): ("create")  } Project Card</h1>
              <Form className="text-left m-2 p-5 text-white bg-dark rounded mt-5">
+
                  <Form.Group controlId="">
-                <Form.Label><b>Title of Event</b></Form.Label> 
+                <Form.Label><b>Title of Project</b></Form.Label> 
                     <Form.Control className="input" type="text" name="title" value={EventPost.title} onChange={handleChange} placeholder="" />
                 </Form.Group>
 
             <Form.Group controlId="">
-                <Form.Label><b>Event Link</b></Form.Label>
-                <Form.Control className="input"type="text" name="link" value={EventPost.link} onChange={handleChange}  placeholder="" />
+                <Form.Label><b>Project DriveLink</b></Form.Label>
+                <Form.Control className="input"type="text" name="dlink" value={EventPost.dlink} onChange={handleChange}  placeholder="" />
             </Form.Group>
 
             <Form.Group controlId="">
+                <Form.Label><b>Project descriptin </b></Form.Label>
+                <Form.Control className="input" type="textarea" name="desc" value={EventPost.desc} onChange={handleChange}  placeholder="" />
+            </Form.Group>
+
+            <Form.Group controlId="">
+                <Form.Label><b>project Sem </b></Form.Label>
+                <Form.Control className="input" type="test" name="sem" value={EventPost.sem} onChange={handleChange}  placeholder="" />
+            </Form.Group>
+
+             <Form.Group controlId="">
                 <Form.Label><b>Image Preview</b></Form.Label>
                 <br/>
-                <img src={EventPost.img} height="100" width="auto" alt={EventPost.title}/>
+                <img src={EventPost.imglink} height="100" width="auto" alt={EventPost.imglink}/>
             </Form.Group>
 
             <div className="test">
@@ -147,7 +166,7 @@ export default function EventUpdate(props) {
             
             </div>
                 
-            <Button variant="primary" onClick={onSubmit}>{ id!=="new" ? ("update"): ("create")  }Event</Button>
+            <Button variant="primary" onClick={onSubmit}>{ id!=="new" ? ("update"): ("create")  } </Button>
             
             </Form>
         </div>

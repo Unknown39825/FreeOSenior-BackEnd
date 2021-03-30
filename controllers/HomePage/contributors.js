@@ -30,9 +30,24 @@ exports.getContributors = (req,res)=>{
     });
     
 };
+// fetch  contributor by id
+exports.getContributorbyid = (req,res)=>{
+
+    Contributor.findById(req.params.contId).exec((err,data)=>{
+        if(err)
+        {
+            return res.status(400).json({
+                error: "no contributor found"
+            })
+        }
+
+        res.json(data);
+    });
+    
+};
 
 // update the contributors by increasing the contribution count
-exports.updateContributors = async (req,res) =>{    
+exports.IncreaseContributor = async (req,res) =>{    
     try{
         
         const  contributor = await Contributor.findById(req.params.contId);
@@ -54,4 +69,36 @@ exports.updateContributors = async (req,res) =>{
         res.status(400).json(error);
     }
 
+}
+// delete contributor
+exports.deleteContributor = (req, res) => {
+  Contributor.findByIdAndRemove(req.params.contId)
+    .then((tut) => {
+      if (!tut) return res.status(400).json({ error: "Contributor not found !!" });
+      res.status(200).json(tut);
+    })
+    .catch((err) => {
+      if (err) return res.status(500).json({ error: "contributor not found !!" });
+    });
+};
+
+// update the contributors by increasing the contribution count
+exports.updateContributors = async (req,res) =>{    
+    try {
+      const contributor = await Contributor.findByIdAndUpdate(
+        req.params.contId,
+        { $set: req.body },
+        { new: true }
+      );
+
+      if (!contributor) return res.status(400).json({ error: "contributor not found !!" });
+      res.status(202).json({
+        msg: "contributor Updated !!",
+        desc: contributor,
+      });
+    }
+     catch (err) {
+      res.status(400).json(err);
+    }
+    
 }

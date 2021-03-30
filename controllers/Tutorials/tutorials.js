@@ -29,12 +29,23 @@ exports.getTutorials = (req,res) => {
         return res.status(500).json(err);
     })
 };
+//get  tutorial by id
+exports.getTutorialsbyId = (req,res) => {
+    Tutorial.findById(req.params.tutId)
+    .then((data) => {
+        res.status(200).json(data);
+    })
+    .catch((err)=>{
+        if(err) 
+        return res.status(500).json(err);
+    })
+};
 
 //update a tutorial
 exports.updateTutorials = async (req,res) => {
+
     if(!req.body.title || !req.body.link || !req.body.category)
       return res.status(500).json({"msg":"fill all the fields"});
-
       let tut;
     try 
     {
@@ -54,6 +65,7 @@ exports.updateTutorials = async (req,res) => {
 
 //delete a tutorial
 exports.deleteTutorials = (req,res) => {
+    
     Tutorial.findByIdAndRemove(req.params.tutId)
     .then((tut) => {
         if(!tut)
@@ -65,7 +77,6 @@ exports.deleteTutorials = (req,res) => {
         return res.status(500).json({error: "Tutorial not found !!"});
     })
 }
-
 
 exports.markTutorials = (req,res) => {
     Tutorial.findById(req.params.tutId)

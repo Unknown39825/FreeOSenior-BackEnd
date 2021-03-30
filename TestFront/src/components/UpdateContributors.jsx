@@ -1,18 +1,19 @@
 
 import axios from 'axios';
-import React, { useState, useEffect } from 'react'
+import React, {  useState ,useEffect} from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
 import { Redirect } from 'react-router-dom';
 
 // import config from "../config.json";
-export default function EventUpdate(props) {
+export default function Updatecontributor(props) 
+{
     let id=props.match.params.id;
     console.log(id);
 
-    const [EventPost, setEvent] = useState({
-        img:'',
-        title:'',
-        link:''
+    const [contributorPost, setcontributor] = useState({
+        name:'',
+        count:'',
+        image:''
     });
 
     const [created, setCreated] = useState(false);
@@ -20,17 +21,17 @@ export default function EventUpdate(props) {
     // const [url, setUrl] = useState("helo");
     const [Data, setData] = useState(undefined);
 
-    useEffect(() => {
+      useEffect(() => {
 
        const dataFetch = async ()=>{
            
            try{
-                const res=await axios.get(`http://127.0.0.1:8000/api/event/${id}`);
+                const res=await axios.get(`http://127.0.0.1:8000/api/contributor/${id}`);
                 // console.log("hello");
                 console.log(res.data);
                 if(res.data)
                 {
-                    setEvent(res.data);
+                    setcontributor(res.data);
                 }
            }
            catch(error){
@@ -59,55 +60,57 @@ export default function EventUpdate(props) {
         });
         const file = await res.json();
         // await setUrl(file.secure_url);
-        await setEvent({
-            ...EventPost,
-            img:file.secure_url
+        await setcontributor({
+            ...contributorPost,
+            image:file.secure_url
         })
     }
 
     const handleChange = (e) => {
-        setEvent({
-            ...EventPost,
+        setcontributor({
+            ...contributorPost,
             [e.target.name]: e.target.value
         })
     }
 
-     const postEvent =async() => {
+    const postEvent =async() => {
 
         if(id!=="new")
         {
             
             try{
 
-            const res= await axios.put( `http://127.0.0.1:8000/api/event/${id}` ,EventPost  );
+            const res= await axios.put( `http://127.0.0.1:8000/api/contributor/${id}` ,contributorPost  );
             console.log(res.data);
             setCreated(true);
         }catch(err){
             console.log(err);
         }
-        window.alert('Event Updated');
+            window.alert('contributor Updated');
         }
         else
         {
-            console.log("create api called");
+            console.log("hello");
              try{
-            const res= await axios.post( "http://127.0.0.1:8000/api/event" , EventPost  );
+            const res= await axios.post("http://127.0.0.1:8000/api/contributor" , contributorPost  );
             console.log(res.data);
             setCreated(true);
         }catch(err){
             console.log(err);
         }
-        window.alert('event  created');
+        window.alert('contributor created');
         }
         
     }
 
     const onSubmit =(e) => {
-        e.preventDefault();
-        if(EventPost.title.trim() !== ""  && EventPost.link.trim() !== ""  && EventPost.img.trim() !== "" ){
+        if(contributorPost.name.trim() !== "" && contributorPost.count.trim!=="" )
+        {
             postEvent();
-        }else{
-            window.alert("Event details are  empty");
+        }
+        else
+        {
+            window.alert("contributor details are  empty");
         }
     }
 
@@ -116,38 +119,43 @@ export default function EventUpdate(props) {
         return <Redirect to="/"></Redirect>
     }
 
-    console.log(EventPost);
+    console.log(contributorPost);
 
     return (
         <Container>
             <div>
-             <h1 className="bg-dark m-2 text-white p-2 rounded">{ id!=="new" ? ("update"): ("create")  }  Event</h1>
-
+             <h1 className="bg-dark m-2 text-white p-2 rounded"> { id!=="new" ? ("update"): ("create")  } contributor</h1>
              <Form className="text-left m-2 p-5 text-white bg-dark rounded mt-5">
+
                  <Form.Group controlId="">
-                <Form.Label><b>Title of Event</b></Form.Label> 
-                    <Form.Control className="input" type="text" name="title" value={EventPost.title} onChange={handleChange} placeholder="" />
+                <Form.Label><b>Name Of contributor</b></Form.Label> 
+                    <Form.Control className="input" type="text" name="name" value={contributorPost.name} onChange={handleChange} placeholder="" />
                 </Form.Group>
 
             <Form.Group controlId="">
-                <Form.Label><b>Event Link</b></Form.Label>
-                <Form.Control className="input"type="text" name="link" value={EventPost.link} onChange={handleChange}  placeholder="" />
+                <Form.Label><b>contribution count </b></Form.Label>
+                <Form.Control className="input"type="text" name="count" value={contributorPost.count} onChange={handleChange}  placeholder="" />
             </Form.Group>
 
-            <Form.Group controlId="">
+            {/* <Form.Group controlId="">
+                <Form.Label><b>contributor link </b></Form.Label>
+                <Form.Control className="input" type="textarea" name="link" value={contributorPost.link} onChange={handleChange}  placeholder="" />
+            </Form.Group> */}
+
+               <Form.Group controlId="">
                 <Form.Label><b>Image Preview</b></Form.Label>
                 <br/>
-                <img src={EventPost.img} height="100" width="auto" alt={EventPost.title}/>
+                <img src={contributorPost.image} height="100" width="auto" alt="image preview"/>
             </Form.Group>
 
             <div className="test">
             <input type="file" name="file" placeholder="upload a image" onChange={uploadImage} />
             <br/>
-            <button onClick={Submit}>upload</button>
+            <button onClick={Submit}>upload</button> 
             
             </div>
                 
-            <Button variant="primary" onClick={onSubmit}>{ id!=="new" ? ("update"): ("create")  }Event</Button>
+            <Button variant="primary" onClick={onSubmit}>{ id!=="new" ? ("update"): ("create")  }</Button>
             
             </Form>
         </div>

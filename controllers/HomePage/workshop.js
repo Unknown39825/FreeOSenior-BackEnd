@@ -25,6 +25,17 @@ exports.getWorkshop = (req, res) => {
     });
 };
 
+//get workshop by id
+exports.getWorkshopbyId = (req, res) => {
+  Workshop.findById(req.params.workshopId)
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      if (err) return res.status(500).json(err);
+    });
+};
+
 //update a Workshop
 exports.updateWorkshop = async (req, res) => {
   let workshop;
