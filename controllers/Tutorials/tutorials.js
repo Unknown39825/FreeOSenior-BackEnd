@@ -38,7 +38,7 @@ exports.updateTutorials = async (req,res) => {
       let tut;
     try 
     {
-        tut=await ProjectCard.findByIdAndUpdate(req.params.tutId,{$set: req.body}, {new: true});
+        tut=await Tutorial.findByIdAndUpdate(req.params.tutId,{$set: req.body}, {new: true});
         if(!tut)
           return res.status(400).json({error:"Tutorial not found !!"});
 
@@ -75,7 +75,7 @@ exports.markTutorials = (req,res) => {
         if(req.body.flag===true)                 //likes incremented
            tut.likes=tut.likes+1;
         else
-           tut.likes=tut.likes-1;             //likes decremented
+           tut.likes=tut.likes-1;               //likes decremented
         tut.save();
         return res.status(202).json({
             "msg":"Tutorial Updated !!",
