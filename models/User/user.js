@@ -11,11 +11,11 @@ var UserSchema = new Schema({
         type: String,
           default: ''
       },
-      admin: {
+      admin: {                  //whether the user is admin or not
         type: Boolean,
         default: false
     }
 });
 
-User.plugin(passportLocalMongoose);
+UserSchema.plugin(passportLocalMongoose);
 module.exports = mongoose.model('User', UserSchema);

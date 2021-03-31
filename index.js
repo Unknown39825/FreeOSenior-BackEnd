@@ -1,10 +1,10 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 const express = require("express");
-const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const passport = require('passport');
 
 // my routes
 const contributorRoutes =require('./routes/HomePage/contributor');
@@ -13,6 +13,7 @@ const eventRoutes= require('./routes/HomePage/event');
 const WorkshopRoutes= require('./routes/HomePage/workshop');
 const projectcardRoutes = require('./routes/ProjectNotes/projectcard');
 const tutorialRoutes = require('./routes/Tutorials/tutorial');
+const userRoutes = require('./routes/Users/user');
 
 //DB Connection
 mongoose
@@ -25,12 +26,20 @@ mongoose
     console.log("DB CONNECTED");
   });
 
+const app = express();
+
 //Middlewares
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
+app.use(express.urlencoded({ extended: false }));
+
+
+app.use(passport.initialize());
+
 
 //My Routes
+app.use("/user",userRoutes);
 app.use("/api",contributorRoutes);
 app.use("/api",homecardRoutes);
 app.use("/api",eventRoutes);
@@ -39,7 +48,7 @@ app.use("/api",projectcardRoutes);
 app.use("/api",tutorialRoutes);
 
 app.use("/",(req,res)=>{
-  res.send("welcome to FreeOSenior");
+  res.send("Welcome to FreeOSenior");
 })
 
 const port = process.env.PORT || 8000;
