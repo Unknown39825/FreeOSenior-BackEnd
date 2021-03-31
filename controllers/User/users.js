@@ -2,10 +2,11 @@ const User = require('../../models/User/user');
 const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
-const {verifyUser , verifyAdmin} = require('../../authenticate');
+const config = require('../../config');
+const authenticate= require('../../authenticate');
 
 //only admin can get list of all users
-exports.getUser = (verifyUser,verifyAdmin , (req,res) => {
+exports.getUser = (req,res) => {
     User.find({})
     .then((users)=> {
         res.status(200).json(users);
@@ -14,7 +15,7 @@ exports.getUser = (verifyUser,verifyAdmin , (req,res) => {
         if(err)
         return res.status(500).json(err);
     })
-});
+};
 
 //anyone can register
 exports.registerUser = (req,res) => {         //username and passowrd to be sent along with firstname and lastname in req body
@@ -47,20 +48,30 @@ exports.registerUser = (req,res) => {         //username and passowrd to be sent
       })
 }
 
-exports.loginUser = ( passport.authenticate('local') , (req,res) => 
-{
-    var token = authenticate.getToken({_id: req.user._id});
+exports.loginUser = (req , res) => {
+    req.logIn(req.user, (err) => {
+        if(err) {
+            res.statusCode=401;
+             res.json({status: "Login Unsuccessful !!"})
+        }
+    var token = authenticate.getToken({_id:req.user._id});
     res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
     res.json({status: 'You are successfully logged In !',token: token});
 });
+};
+
 
 exports.logoutUser = (req,res) => {
-    if(res.session) {
+    if (req.session) {
         req.session.destroy();
         res.clearCookie('session-id');
-        res.redirect('/');
-    }
-    else {
-        return res.status(403).json({"Error":"You are not logged In !"})
-    }
+        res.json("Logout Successfull !!");
+      }
+      else {
+        var err = new Error('You are not logged in!');
+        res.json(err);
+      }
+      //some issues with logout
+      //we need to destroy token when logout is called
 }

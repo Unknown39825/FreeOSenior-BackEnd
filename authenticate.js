@@ -5,7 +5,6 @@ var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
 var jwt = require('jsonwebtoken');
 
-
 var config = require('./config');
 const User = require('./models/User/user');
 const user = require('./models/User/user');
@@ -14,9 +13,9 @@ exports.local = passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-exports.getToken = function(user) {                   //generates a new JWT for a user
-    return jwt.sign(user,config.secretKey,
-        {expiresIn: 3600});
+exports.getToken = function(user)  {                   //generates a new JWT for a user
+let token= jwt.sign(user,config.secretKey, {expiresIn: 3600} );
+return token;
 };
 
 var opts = {};
@@ -39,10 +38,7 @@ exports.jwtPassport = passport.use(new JwtStrategy(opts, (jwt_payload,done) => {
     })
 }));
 
-exports.verifyUser = () => {
-    console.log("Hello");
-    passport.authenticate('jwt',{session: false});
-}
+exports.verifyUser = passport.authenticate('jwt',{session: false});
 
 exports.verifyAdmin = (req, res, next) => {
     User.findOne({_id: req.user._id})
