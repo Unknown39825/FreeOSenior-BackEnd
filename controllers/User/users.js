@@ -63,7 +63,7 @@ exports.loginUser = (req , res) => {
 
 
 exports.logoutUser = (req,res) => {
-    if (req.session) {
+    /*if (req.session) {
         req.session.destroy();
         res.clearCookie('session-id');
         res.json("Logout Successfull !!");
@@ -71,7 +71,9 @@ exports.logoutUser = (req,res) => {
       else {
         var err = new Error('You are not logged in!');
         res.json(err);
-      }
+      }*/
+      //TODO
       //some issues with logout
       //we need to destroy token when logout is called
+      //not handeled till now
 }

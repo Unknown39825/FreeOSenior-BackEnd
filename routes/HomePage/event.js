@@ -7,11 +7,12 @@ const {
   getEventbyId,
 } = require("../../controllers/HomePage/event");
 const router = express.Router();
+const authenticate= require('../../authenticate');
 
-router.post("/event", createEvent);
+router.post("/event",authenticate.verifyUser,authenticate.verifyAdmin, createEvent);
 router.get("/event", getEvent);
-router.put("/event/:eventId", updateEvent);
-router.get("/event/:eventId", getEventbyId);
-router.delete("/event/:eventId", deleteEvent);
+router.put("/event/:eventId",authenticate.verifyUser,authenticate.verifyAdmin ,updateEvent);
+router.get("/event/:eventId", authenticate.verifyUser,authenticate.verifyAdmin,getEventbyId);
+router.delete("/event/:eventId", authenticate.verifyUser,authenticate.verifyAdmin,deleteEvent);
 
 module.exports = router;

@@ -7,9 +7,13 @@ const {
   getWorkshopbyId,
 } = require("../../controllers/HomePage/workshop");
 const router = express.Router();
-router.post("/workshop", createWorkshop);
+
+const authenticate= require('../../authenticate');
+
+router.post("/workshop",authenticate.verifyUser ,createWorkshop);
 router.get("/workshop", getWorkshop);
-router.put("/workshop/:workshopId", updateWorkshop);
-router.get("/workshop/:workshopId", getWorkshopbyId);
-router.delete("/workshop/:workshopId", deleteWorkshop);
+router.put("/workshop/:workshopId", authenticate.verifyUser,authenticate.verifyAdmin,updateWorkshop);
+router.get("/workshop/:workshopId",authenticate.verifyUser,authenticate.verifyAdmin ,getWorkshopbyId);
+router.delete("/workshop/:workshopId",authenticate.verifyUser,authenticate.verifyAdmin ,deleteWorkshop);
+
 module.exports = router;
