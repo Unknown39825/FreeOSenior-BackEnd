@@ -65,8 +65,10 @@ exports.loginUser = (req , res) => {
 
 };
 
-
 exports.logoutUser = (req,res) => {
+
+    req.logout();
+    res.json("logout succes");
     /*if (req.session) {
         req.session.destroy();
         res.clearCookie('session-id');
