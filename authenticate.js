@@ -38,7 +38,7 @@ exports.jwtPassport = passport.use(new JwtStrategy(opts, (jwt_payload,done) => {
     })
 }));
 
-exports.verifyUser = passport.authenticate('jwt',{session: false});
+exports.verifyUser =  passport.authenticate('jwt',{session: false});
 
 exports.verifyAdmin = (req, res, next) => {
     User.findOne({_id: req.user._id})
@@ -47,9 +47,8 @@ exports.verifyAdmin = (req, res, next) => {
             next();              //move ahead only if user is admin
         }
         else {
-            err = new Error('You are not authorized to perform this operation!');
-            err.status = 403;
-            return next(err);
+            res.status(403).json({"msg" : "Admin access required !!"});
+            return next(res);
         } 
     }, (err) => next(err))
     .catch((err) => next(err))
