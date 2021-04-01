@@ -1,5 +1,5 @@
 const express= require("express");
-const { registerUser, getUser, loginUser,logoutUser} = require("../../controllers/User/users");
+const { registerUser, getUser, loginUser,logoutUser, logoutUserAll} = require("../../controllers/User/user");
 const router = express.Router();
 const authenticate = require('../../authenticate');
 const passport= require('passport');
@@ -16,7 +16,11 @@ router.post("/login",(req,res,next) => {
    next();
 },passport.authenticate('local'),loginUser);
 
-
-router.get("/logout",logoutUser);
+router.get(
+  "/logout",
+  authenticate.verifyUser,
+  logoutUser
+);
+router.get("/logoutall",authenticate.verifyUser,logoutUserAll);
 
 module.exports =router;

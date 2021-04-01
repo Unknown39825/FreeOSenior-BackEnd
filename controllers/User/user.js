@@ -2,8 +2,7 @@ const User = require('../../models/User/user');
 const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
-const config = require('../../config');
-const authenticate= require('../../authenticate');
+// const config = require('../../config');
 
 //only admin can get list of all users
 exports.getUser = (req,res) => {
@@ -56,30 +55,41 @@ exports.registerUser = (req,res) => {         //username and passowrd to be sent
    
 }
 
-exports.loginUser = (req , res) => {
-     
-    var token = authenticate.getToken({_id:req.user._id});
+exports.loginUser = async (req , res) => {
+
+    var token = await req.user.generateAuthToken();
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     res.json({status: 'You are successfully logged In !',token: token});
 
 };
 
-exports.logoutUser = (req,res) => {
+exports.logoutUser = async (req,res) => {
 
-    req.logout();
-    res.json("logout succes");
-    /*if (req.session) {
-        req.session.destroy();
-        res.clearCookie('session-id');
-        res.json("Logout Successfull !!");
-      }
-      else {
-        var err = new Error('You are not logged in!');
-        res.json(err);
-      }*/
-      //TODO
-      //some issues with logout
-      //we need to destroy token when logout is called
-      //not handeled till now
+    try {
+        req.user.tokens = req.user.tokens.filter((token)=>{
+            return token.token!=req.token;
+        })
+        
+        await req.user.save();
+
+        res.status(200).json(req.user);
+        
+    } catch (error) {
+        res.status(500).json(error);
+        
+    }
+    
+}
+exports.logoutUserAll = async (req,res) => {
+
+    try {
+        req.user.tokens = [];
+        await req.user.save();
+        res.status(200).json("logout Success");
+    } catch (error) {
+        res.status(500).send("unable to logout");
+        
+    }
+    
 }

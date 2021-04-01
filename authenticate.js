@@ -1,44 +1,59 @@
-const { JsonWebTokenError } = require('jsonwebtoken');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var JwtStrategy = require('passport-jwt').Strategy;
-var ExtractJwt = require('passport-jwt').ExtractJwt;
-var jwt = require('jsonwebtoken');
-
+// var JwtStrategy = require('passport-jwt').Strategy;
+// var ExtractJwt = require('passport-jwt').ExtractJwt;
+const jwt = require("jsonwebtoken");
 var config = require('./config');
 const User = require('./models/User/user');
-const user = require('./models/User/user');
+// const user = require('./models/User/user');
 
 exports.local = passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-exports.getToken = function(user)  {                   //generates a new JWT for a user
-let token= jwt.sign(user,config.secretKey, {expiresIn: 3600} );
-return token;
-};
+// var opts = {};
+// opts.jwtFromRequest =  ExtractJwt.fromAuthHeaderAsBearerToken();       //token will be sent as bearer token in auth header
+// opts.secretOrKey = config.secretKey;
 
-var opts = {};
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();       //token will be sent as bearer token in auth header
-opts.secretOrKey = config.secretKey;
+// exports.jwtPassport = passport.use(new JwtStrategy(opts, async (jwt_payload,done) => {
+//     console.log(jwt_payload);
+//     user.findOne({_id: jwt_payload._id},(err,user) => {
+//         if(err) {
+//             return done(err, false);
+//         }
+//         else if(user) {
+//             return done(null,user);
+//         }
+//         else {
+//             return done(null,false);
+//         }
+//     })
+// }));
 
+exports.verifyUser =  async (req,res,next)=>{
 
-exports.jwtPassport = passport.use(new JwtStrategy(opts, (jwt_payload,done) => {
-    console.log("JWT payload: ",jwt_payload);
-    user.findOne({_id: jwt_payload._id},(err,user) => {
-        if(err) {
-            return done(err, false);
-        }
-        else if(user) {
-            return done(null,user);
-        }
-        else {
-            return done(null,false);
-        }
-    })
-}));
+    try {
+      const token = req.header("Authorization").replace("Bearer ", "");
+      
+      const decoded = jwt.verify(token, config.secretKey);
+      const user = await User.findOne({
+        _id: decoded._id,
+        "tokens.token": token,
+      });
 
-exports.verifyUser =  passport.authenticate('jwt',{session: false});
+      if (!user) {
+        throw new Error();
+      }
+
+      req.token = token;
+      req.user = user;
+      
+      next();
+    } catch (e) {
+      res.status(401).send({ error: "You are not Logged in" });
+    }
+
+}
 
 exports.verifyAdmin = (req, res, next) => {
     User.findOne({_id: req.user._id})
@@ -53,4 +68,3 @@ exports.verifyAdmin = (req, res, next) => {
     }, (err) => next(err))
     .catch((err) => next(err))
 }
-
