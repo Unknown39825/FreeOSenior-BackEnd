@@ -7,6 +7,6 @@ const passport= require('passport');
 router.post("/signup",registerUser);
 router.get("/all",authenticate.verifyUser,authenticate.verifyAdmin,getUser);
 router.post("/login",passport.authenticate('local'),loginUser);
-router.get("/logout",logoutUser);
+router.delete("/logout",logoutUser);
 
 module.exports =router;
