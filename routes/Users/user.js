@@ -18,6 +18,5 @@ router.post("/login",(req,res,next) => {
 
 
 router.get("/logout",logoutUser);
-router.delete("/logout",logoutUser);
 
 module.exports =router;
