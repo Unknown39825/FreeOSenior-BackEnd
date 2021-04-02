@@ -1,9 +1,7 @@
 const User = require('../../models/User/user');
-const express = require('express');
-const bodyParser = require('body-parser');
+const config = require('../../config');
 const passport = require('passport');
-// const config = require('../../config');
-
+const jwt = require("jsonwebtoken");
 //only admin can get list of all users
 exports.getUser = (req,res) => {
     User.find({})
@@ -57,6 +55,13 @@ exports.registerUser = (req,res) => {         //username and passowrd to be sent
 
 exports.loginUser = async (req , res) => {
 
+    const { user} = await User.authenticate()(req.body.username, req.body.password);
+    if(!user)
+    {
+      return res.status(404).json("user not found");
+
+    }
+    req.user=user;
     var token = await req.user.generateAuthToken();
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
@@ -66,11 +71,23 @@ exports.loginUser = async (req , res) => {
 
 exports.logoutUser = async (req,res) => {
 
+    console.log(req.token);
+    
     try {
-        req.user.tokens = req.user.tokens.filter((token)=>{
-            return token.token!=req.token;
+        req.user.tokens= req.user.tokens.filter((token)=>{
+
+           return jwt.verify(token.token, config.secretKey,(err,data)=>{
+
+              if(!err && token.token!=req.token)
+              {
+                return true;
+              }
+              return false;
+
+            });
+            
         })
-        
+
         await req.user.save();
 
         res.status(200).json(req.user);

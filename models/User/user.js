@@ -31,19 +31,12 @@ UserSchema.methods.generateAuthToken = async function()
 {
   const user = this;
   
-  const token = jwt.sign({ _id: user._id.toString() }, config.secretKey,{expiresIn:'1min'});
+  const token = jwt.sign({ _id: user._id.toString() }, config.secretKey,{expiresIn:config.expiresIn});
   
   user.tokens = user.tokens.concat({ token });
   await user.save();
   return token;
 }
-
-// this method was removed from the authenticate .js
-// exports.getToken = function (user) {
-//   //generates a new JWT for a user
-//   let token = jwt.sign(user, config.secretKey, { expiresIn: 3600 });
-//   return token;
-// };
 
 // plugin used for automatic hasing salting and password storage.
 UserSchema.plugin(passportLocalMongoose);

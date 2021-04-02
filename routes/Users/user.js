@@ -1,11 +1,10 @@
 const express= require("express");
 const { registerUser, getUser, loginUser,logoutUser, logoutUserAll} = require("../../controllers/User/user");
 const router = express.Router();
-const authenticate = require('../../authenticate');
-const passport= require('passport');
+const {verifyAdmin, verifyUser} = require('../../authenticate');
 
 router.post("/signup",registerUser);
-router.get("/all",authenticate.verifyUser,authenticate.verifyAdmin,getUser);
+router.get("/all",verifyUser,verifyAdmin,getUser);
 
 router.post("/login",(req,res,next) => {
     if(!req.body.username || !req.body.password)
@@ -14,13 +13,14 @@ router.post("/login",(req,res,next) => {
   }
   else
    next();
-},passport.authenticate('local'),loginUser);
+}
+ ,loginUser);
 
 router.get(
   "/logout",
-  authenticate.verifyUser,
+  verifyUser,
   logoutUser
 );
-router.get("/logoutall",authenticate.verifyUser,logoutUserAll);
+router.get("/logoutall",verifyUser,logoutUserAll);
 
 module.exports =router;
