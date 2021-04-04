@@ -19,7 +19,7 @@ exports.getUser = (req,res) => {
 };
 
 //anyone can register
-exports.registerUser = (req,res) => {         
+exports.registerUser = async (req,res) => {         
 
   if(!req.body.username || !req.body.password || !req.body.email)
   {
@@ -27,6 +27,12 @@ exports.registerUser = (req,res) => {
   }
 
   else {
+       const mail=req.body.email;
+       const user = await User.findOne({ email: mail });
+        if (user) 
+           return res.status(401).json({message: 'This email is already assocaited with another account !!'});
+
+
     var newUser = new User({
        username: req.body.username,
        password: req.body.password,
@@ -55,7 +61,7 @@ exports.registerUser = (req,res) => {
                 <a href="http://${req.headers.host}/user/verify-email?token=${user.emailToken}">Verify your account</a>`
       }
        try {
-         await sgMail.send(msg);
+         //await sgMail.send(msg);
          res.status(200).json({status: 'success','msg': 'Thanks for Registering !! Please check your email for verification',
          'user':user});
          res.redirect('/');

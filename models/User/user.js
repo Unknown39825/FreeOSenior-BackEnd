@@ -15,13 +15,15 @@ var UserSchema = new Schema({
       },
       username: {
           type: String,
-          required: true
+          unique: true
       },
       password: {
-        type: String
+        type: String,
+        max: 20
       },
       email: {
-        type: String
+        type: String,
+        unique: true
       },
       emailToken: {
         type: String
