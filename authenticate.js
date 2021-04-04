@@ -45,3 +45,18 @@ exports.verifyAdmin = (req, res, next) => {
     }, (err) => next(err))
     .catch((err) => next(err))
 }
+
+exports.isVerifiedUser = (req,res,next) => {
+
+      User.findOne({username: req.body.username})
+      .then((user) => {
+        if (user.isVerified) {
+            next();              
+        }
+        else {
+            res.status(403).json({"msg" : "Your account has not been verified !!"});
+            return next(res);
+        } 
+    }, (err) => next(err))
+    .catch((err) => next(err)) 
+}

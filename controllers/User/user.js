@@ -35,7 +35,6 @@ exports.registerUser = async (req,res) => {
 
     var newUser = new User({
        username: req.body.username,
-       password: req.body.password,
        email: req.body.email,
        emailToken: crypto.randomBytes(64).toString('hex'),
        firstname : req.body.firstname,
@@ -92,7 +91,7 @@ exports.verifyEmail = async (req,res) => {
    }
    catch(error) {
     if(error) {
-      res.status(500).json('Something went Wrong !!',error);
+      res.status(500).json({status: 'Something went Wrong !!',error: error});
       res.redirect('/');
      } 
    }
