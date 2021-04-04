@@ -1,9 +1,10 @@
 const express= require("express");
-const { registerUser, getUser, loginUser,logoutUser, logoutUserAll} = require("../../controllers/User/user");
+const { registerUser, getUser, loginUser,logoutUser, logoutUserAll, verifyEmail} = require("../../controllers/User/user");
 const router = express.Router();
 const {verifyAdmin, verifyUser} = require('../../authenticate');
 
 router.post("/signup",registerUser);
+router.get("/verify-email",verifyEmail);
 router.get("/all",verifyUser,verifyAdmin,getUser);
 
 router.post("/login",(req,res,next) => {

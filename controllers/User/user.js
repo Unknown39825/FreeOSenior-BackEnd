@@ -2,6 +2,10 @@ const User = require('../../models/User/user');
 const config = require('../../config');
 const passport = require('passport');
 const jwt = require("jsonwebtoken");
+const crypto = require('crypto');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 //only admin can get list of all users
 exports.getUser = (req,res) => {
     User.find({})
@@ -15,42 +19,77 @@ exports.getUser = (req,res) => {
 };
 
 //anyone can register
-exports.registerUser = (req,res) => {         //username and passowrd to be sent along with firstname and lastname in req body
+exports.registerUser = (req,res) => {         
 
-  if(!req.body.username || !req.body.password)
+  if(!req.body.username || !req.body.password || !req.body.email)
   {
-    res.status(400).json({"msg": "Either username or password field is empty"});
+    res.status(400).json({"msg": "Either username/password/Email field is empty"});
   }
 
   else {
-    User.register(new User({username: req.body.username}),req.body.password , (err,user) => {
+    var newUser = new User({
+       username: req.body.username,
+       password: req.body.password,
+       email: req.body.email,
+       emailToken: crypto.randomBytes(64).toString('hex'),
+       firstname : req.body.firstname,
+       lastname: req.body.lastname
+    });
+    User.register(newUser,req.body.password ,async (err,user) => {
       if(err) {
         res.statusCode = 500;
-        res.setHeader('Content-Type', 'application/json');
+        //res.setHeader('Content-Type', 'application/json');
         res.json({err: err});
       }
-      else {
-        if (req.body.firstname)
-          user.firstname = req.body.firstname;
-        if (req.body.lastname)
-          user.lastname = req.body.lastname;
-        user.save((err, user) => {
-          if (err) {
-            res.statusCode = 500;
-            res.setHeader('Content-Type', 'application/json');
-            res.json({err: err});
-            return ;
-          }
-        passport.authenticate('local')(req,res, () => {
-          res.statusCode = 200;
-          res.setHeader('Content-Type', 'application/json');
-          res.json({success: true , status: 'Registration Successful!',user: user});
-        });
-      });
+      
+      const msg = {
+        from: 'noreply@email.com',
+        to: user.email,
+        subject: 'FreeOSenior Registration - Verify your Email',
+        text: `Hi there, Thanks for registering on freeOsenior !!,
+               Please copy and paste the url given below to verify your account: 
+               http://${req.headers.host}/user/verify-email?token=${user.emailToken}`,
+        html: `<h1>Hi there,</h1>
+                <p>Thanks for registering on freeOsenior !!</p>
+                <p>Please click on the link given below to verify your account:</p>
+                <a href="http://${req.headers.host}/user/verify-email?token=${user.emailToken}">Verify your account</a>`
       }
-    })
-  }
-   
+       try {
+         await sgMail.send(msg);
+         res.status(200).json({status: 'success','msg': 'Thanks for Registering !! Please check your email for verification',
+         'user':user});
+         res.redirect('/');
+       }
+       catch(err)
+       {
+         if(err) {
+          res.status(500).json('Something went Wrong !!');
+          res.redirect('/');
+         } 
+       }
+});
+}
+}
+
+//email verification api
+exports.verifyEmail = async (req,res) => {
+   try {
+     const user = await User.findOne({emailToken: req.query.token});
+     if(!user) {
+      res.status(401).json('Token Invalid !!, Please try registering again !!');
+      return res.redirect('/');
+     }
+      user.emailToken=null;         //detroying the token so that no one else can use this link again
+      user.isVerified=true;
+      await user.save();
+      res.status(200).json({status: "Email Verification Successfull !!"});
+   }
+   catch(error) {
+    if(error) {
+      res.status(500).json('Something went Wrong !!',error);
+      res.redirect('/');
+     } 
+   }
 }
 
 exports.loginUser = async (req , res) => {
@@ -58,8 +97,7 @@ exports.loginUser = async (req , res) => {
     const { user} = await User.authenticate()(req.body.username, req.body.password);
     if(!user)
     {
-      return res.status(404).json("user not found");
-
+      return res.status(404).json({"msg": "Invalid Credentials !!"});
     }
     req.user=user;
     var token = await req.user.generateAuthToken();

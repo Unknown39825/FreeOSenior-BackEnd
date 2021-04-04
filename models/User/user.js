@@ -13,6 +13,23 @@ var UserSchema = new Schema({
         type: String,
           default: ''
       },
+      username: {
+          type: String,
+          required: true
+      },
+      password: {
+        type: String
+      },
+      email: {
+        type: String
+      },
+      emailToken: {
+        type: String
+      },
+      isVerified: {
+          type: Boolean,
+          default: false
+      },
       admin: {                  //whether the user is admin or not
         type: Boolean,
         default: false
