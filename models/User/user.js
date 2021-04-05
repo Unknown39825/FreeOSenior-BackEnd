@@ -1,6 +1,6 @@
+require("dotenv").config();
 var mongoose = require('mongoose');
 var passportLocalMongoose = require('passport-local-mongoose');
-const config = require('../../config');
 const jwt = require("jsonwebtoken");
 var Schema = mongoose.Schema;
 
@@ -50,7 +50,7 @@ UserSchema.methods.generateAuthToken = async function()
 {
   const user = this;
   
-  const token = jwt.sign({ _id: user._id.toString() }, config.secretKey,{expiresIn:config.expiresIn});
+  const token = jwt.sign({ _id: user._id.toString() }, process.env.secretKey,{expiresIn:process.env.expiresIn});
   
   user.tokens = user.tokens.concat({ token });
   await user.save();

@@ -1,12 +1,12 @@
+require("dotenv").config();
 var passport = require('passport');
 var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
-var config = require('./config');
 const User = require('./models/User/user');
 
 var opts = {
   jwtFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),// toe get token from the auth header
-  secretOrKey : config.secretKey,// secret key
+  secretOrKey : process.env.secretKey,// secret key
   passReqToCallback:true//to pass req to the callback
 };
 
