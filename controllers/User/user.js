@@ -18,8 +18,8 @@ exports.getUser = async (req, res) => {
 
 //anyone can register
 exports.registerUser = async (req, res) => {
-        if (!req.body.username || !req.body.password || !req.body.email) {
-          return res.status(400).json({ msg: "Either username/password/Email field is empty" });
+        if ( !req.body.password || !req.body.email) {
+          return res.status(400).json({ msg: "Either password/Email field is empty" });
         } 
         // var validator = require('validator');
 
@@ -31,29 +31,19 @@ exports.registerUser = async (req, res) => {
         }
         
         else {
-              const mail = req.body.email;
-              const user = await User.findOne({ email: mail });
-              if (user)
-                return res.status(401).json({
-                  // var validator = require('validator');
-                  message:
-                    "This email is already associated with another account !!",
-                });
-
+             
               var newUser = new User({
-                username: req.body.username,
                 email: req.body.email,
                 emailToken: crypto.randomBytes(64).toString("hex"),
                 firstname: req.body.firstname,
                 lastname: req.body.lastname,
               });
-
               await User.register(
                 newUser,
                 req.body.password,
                 async (err, user) => {
                   if (err) {
-                    return res.status(400).json({error:"User name / Email already exits"});
+                    return res.status(400).json({error:"Email already exits"});
                   }
 
                   const msg = {
@@ -118,7 +108,7 @@ exports.verifyEmail = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
   const { user } = await User.authenticate()(
-    req.body.username,
+    req.body.email,
     req.body.password
   );
   if (!user) {

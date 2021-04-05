@@ -8,9 +8,9 @@ router.get("/verify-email",verifyEmail);
 router.get("/all",verifyUser,verifyAdmin,getUser);
 
 router.post("/login",(req,res,next) => {
-    if(!req.body.username || !req.body.password)
+    if(!req.body.email || !req.body.password)
   {
-    res.status(400).json({"msg": "Either username or password field is empty"});
+    res.status(400).json({"msg": "Either email or password field is empty"});
   }
   else
    next();

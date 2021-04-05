@@ -48,7 +48,7 @@ exports.verifyAdmin = (req, res, next) => {
 
 exports.isVerifiedUser = (req,res,next) => {
 
-      User.findOne({username: req.body.username})
+      User.findOne({email: req.body.email})
       .then((user) => {
         if (user.isVerified) {
             next();              

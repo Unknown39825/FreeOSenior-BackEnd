@@ -13,10 +13,6 @@ var UserSchema = new Schema({
         type: String,
           default: ''
       },
-      username: {
-          type: String,
-          unique: true
-      },
       password: {
         type: String,
         max: 20
@@ -58,5 +54,5 @@ UserSchema.methods.generateAuthToken = async function()
 }
 
 // plugin used for automatic hasing salting and password storage.
-UserSchema.plugin(passportLocalMongoose);
+UserSchema.plugin(passportLocalMongoose,{usernameField:"email" });
 module.exports = mongoose.model('User', UserSchema);
