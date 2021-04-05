@@ -54,5 +54,5 @@ UserSchema.methods.generateAuthToken = async function()
 }
 
 // plugin used for automatic hasing salting and password storage.
-UserSchema.plugin(passportLocalMongoose,{usernameField:"email" });
+UserSchema.plugin(passportLocalMongoose,{usernameField:"email"});
 module.exports = mongoose.model('User', UserSchema);
