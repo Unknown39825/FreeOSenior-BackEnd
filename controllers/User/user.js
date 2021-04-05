@@ -30,7 +30,7 @@ exports.registerUser = async (req,res) => {
        const mail=req.body.email;
        const user = await User.findOne({ email: mail });
         if (user) 
-           return res.status(401).json({message: 'This email is already assocaited with another account !!'});
+           return res.status(401).json({message: 'This email is already associated with another account !!'});
 
 
     var newUser = new User({
@@ -48,7 +48,7 @@ exports.registerUser = async (req,res) => {
       }
       
       const msg = {
-        from: 'noreply@email.com',
+        from: 'freeosenior@gmail.com',
         to: user.email,
         subject: 'FreeOSenior Registration - Verify your Email',
         text: `Hi there, Thanks for registering on freeOsenior !!,
@@ -60,7 +60,7 @@ exports.registerUser = async (req,res) => {
                 <a href="http://${req.headers.host}/user/verify-email?token=${user.emailToken}">Verify your account</a>`
       }
        try {
-         //await sgMail.send(msg);
+         await sgMail.send(msg);       //calling sendgrid to send email to the user's mail
          res.status(200).json({status: 'success','msg': 'Thanks for Registering !! Please check your email for verification',
          'user':user});
          res.redirect('/');

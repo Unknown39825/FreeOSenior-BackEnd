@@ -14,9 +14,11 @@ router.post("/login",(req,res,next) => {
   }
   else
    next();
-  },isVerifiedUser,loginUser);
+  },isVerifiedUser,loginUser);             //only verified user can login
 
 router.get("/logout",verifyUser,logoutUser);
 router.get("/logoutall",verifyUser,logoutUserAll);
 
 module.exports =router;
+
+//TODO forgot passowrd api to be added
