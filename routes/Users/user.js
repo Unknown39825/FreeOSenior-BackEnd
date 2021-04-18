@@ -18,7 +18,7 @@ router.post("/login",(req,res,next) => {
 
 router.get("/logout",verifyUser,logoutUser);
 router.get("/logoutall",verifyUser,logoutUserAll);
-router.get("/forgot",forgotPassword);
+router.put("/forgot",forgotPassword);
 router.put("/otp/verify",verifyOtp);
 
 module.exports =router;
