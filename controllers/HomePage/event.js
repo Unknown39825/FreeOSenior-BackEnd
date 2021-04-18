@@ -1,4 +1,3 @@
-const { json } = require("body-parser");
 const Event = require("../../models/HomePage/event");
 
 //create Event
@@ -21,7 +20,7 @@ exports.getEvent = (req, res) => {
       res.status(200).json(data);
     })
     .catch((err) => {
-      if (err) return res.status(500).json(err);
+      if (err) return res.status(500).json({error: err});
     });
 };
 
@@ -32,7 +31,7 @@ exports.getEventbyId = (req, res) => {
       res.status(200).json(data);
     })
     .catch((err) => {
-      if (err) return res.status(500).json(err);
+      if (err) return res.status(500).json({error: err});
     });
 };
 
@@ -46,9 +45,9 @@ exports.updateEvent = async (req, res) => {
       { $set: req.body },
       { new: true }
     );
-    if (!event) return res.status(400).json({ error: "event not found !!" });
+    if (!event) return res.status(400).json({ error: "Event not found !!" });
   } catch (err) {
-    res.status(400).json(err);
+    res.status(400).json({error: err});
   }
   res.status(202).json({
     msg: "event Updated !!",
@@ -64,6 +63,6 @@ exports.deleteEvent = (req, res) => {
       res.status(200).json(event);
     })
     .catch((err) => {
-      if (err) return res.status(500).json({ error: "event not found !!" });
+      if (err) return res.status(500).json({ error: "Event not found !!" ,desc: err});
     });
 };

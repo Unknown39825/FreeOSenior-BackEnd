@@ -1,4 +1,3 @@
-const { json } = require("body-parser");
 const ProjectCard = require("../../models/ProjectNotes/projectcard");
 
 //create projectcard
@@ -26,7 +25,7 @@ exports.getProjectCards = (req,res) => {
     })
     .catch((err)=>{
         if(err) 
-        return res.status(500).json(err);
+        return res.status(500).json({error: err});
     })
 };
 
@@ -37,7 +36,7 @@ exports.getProjectCardsbyId = (req,res) => {
     })
     .catch((err)=>{
         if(err) 
-        return res.status(500).json(err);
+        return res.status(500).json({error: err});
     })
 };
 
@@ -57,10 +56,9 @@ exports.updateProjectCards = async (req,res) => {
 
     }
     catch(err) {
-        res.status(400).json(err);
+        res.status(400).json({error: err});
     }
-    res.status(202).json(card
-    );
+    res.status(202).json(card);
 };
 
 //delete a homecard
@@ -73,7 +71,7 @@ exports.deleteProjectCards = (req,res) => {
     })
     .catch((err) =>{
         if(err) 
-        return res.status(500).json({error: "Card not found !!"});
+        return res.status(500).json({error: "Card not found !!",desc: err});
     })
 }
 
@@ -94,6 +92,6 @@ exports.markProjectCards = (req,res) => {
     })
     .catch((err)=> {
         if(err) 
-        return res.status(500).json({error: "Card not found !!"});
+        return res.status(500).json({error: "Card not found !!",desc: err});
     })
 }

@@ -1,4 +1,3 @@
-const { json } = require("body-parser");
 const HomeCard = require("../../models/HomePage/homecard");
 
 //create homecard
@@ -23,7 +22,7 @@ exports.getHomeCards = (req,res) => {
     })
     .catch((err)=>{
         if(err) 
-        return res.status(500).json(err);
+        return res.status(500).json({error: err});
     })
 };
 exports.getHomeCardbyId = (req,res) => {
@@ -33,7 +32,7 @@ exports.getHomeCardbyId = (req,res) => {
     })
     .catch((err)=>{
         if(err) 
-        return res.status(500).json(err);
+        return res.status(500).json({error: err});
     })
 };
 
@@ -51,7 +50,7 @@ exports.updateHomeCards = async (req,res) => {
 
     }
     catch(err) {
-        res.status(400).json(err);
+        res.status(400).json({error: err});
     }
     res.status(202).json({
         "msg":"Card Updated !!",
@@ -69,6 +68,6 @@ exports.deleteHomeCards = (req,res) => {
     })
     .catch((err) =>{
         if(err) 
-        return res.status(500).json({error: "Card not found !!"});
+        return res.status(500).json({error: "Card not found !!",desc: err});
     })
 }

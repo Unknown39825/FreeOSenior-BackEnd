@@ -1,4 +1,3 @@
-const { json } = require("body-parser");
 const Workshop = require("../../models/HomePage/workshop");
 
 //create Workshop
@@ -21,7 +20,7 @@ exports.getWorkshop = (req, res) => {
       res.status(200).json(data);
     })
     .catch((err) => {
-      if (err) return res.status(500).json(err);
+      if (err) return res.status(500).json({error: err});
     });
 };
 
@@ -32,7 +31,7 @@ exports.getWorkshopbyId = (req, res) => {
       res.status(200).json(data);
     })
     .catch((err) => {
-      if (err) return res.status(500).json(err);
+      if (err) return res.status(500).json({error: err});
     });
 };
 
@@ -42,8 +41,7 @@ exports.updateWorkshop = async (req, res) => {
 //   console.log(req.params);
 //   console.log(req.body);
   try {
-    
-    workshop = await Workshop.findByIdAndUpdate(
+      workshop = await Workshop.findByIdAndUpdate(
       req.params.workshopId,
       { $set: req.body },
       { new: true }
@@ -54,7 +52,7 @@ exports.updateWorkshop = async (req, res) => {
   } 
   
   catch (err) {
-    res.status(400).json({error:"not updated"});
+    res.status(400).json({error:"Not updated",desc: err});
   }
 
   res.status(202).json({
@@ -73,6 +71,6 @@ exports.deleteWorkshop = (req, res) => {
       res.status(200).json(workshop);
     })
     .catch((err) => {
-      if (err) return res.status(500).json({ error: "Workshop not found !!" });
+      if (err) return res.status(500).json({ error: "Workshop not found !!" ,desc: err});
     });
 };

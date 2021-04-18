@@ -1,4 +1,3 @@
-const { json } = require("body-parser");
 const Tutorial = require("../../models/Tutorials/turorial");
 
 //create tutorials
@@ -26,7 +25,7 @@ exports.getTutorials = (req,res) => {
     })
     .catch((err)=>{
         if(err) 
-        return res.status(500).json(err);
+        return res.status(500).json({error: err});
     })
 };
 //get  tutorial by id
@@ -37,7 +36,7 @@ exports.getTutorialsbyId = (req,res) => {
     })
     .catch((err)=>{
         if(err) 
-        return res.status(500).json(err);
+        return res.status(500).json({error: err});
     })
 };
 
@@ -55,7 +54,7 @@ exports.updateTutorials = async (req,res) => {
 
     }
     catch(err) {
-        res.status(400).json(err);
+        res.status(400).json({error: err});
     }
     res.status(202).json({
         "msg":"Tutorial Updated !!",
@@ -74,7 +73,7 @@ exports.deleteTutorials = (req,res) => {
     })
     .catch((err) =>{
         if(err) 
-        return res.status(500).json({error: "Tutorial not found !!"});
+        return res.status(500).json({error: "Tutorial not found !!",desc: err});
     })
 }
 
@@ -95,6 +94,6 @@ exports.markTutorials = (req,res) => {
     })
     .catch((err)=> {
         if(err) 
-        return res.status(500).json({error: "Tutorial not found !!"});
+        return res.status(500).json({error: "Tutorial not found !!", desc: err});
     })
 }

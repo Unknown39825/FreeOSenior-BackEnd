@@ -7,7 +7,7 @@ exports.createContributor = (req,res)=>{
     contributor.save((err,data)=>{
         if(err)
         return res.status(400).json({
-            error:"unable to save data",
+            error:"Unable to save data !!",
             desc:err
         })
         res.json(data);
@@ -22,7 +22,8 @@ exports.getContributors = (req,res)=>{
         if(err)
         {
             return res.status(400).json({
-                error: "no contributor found"
+                error: "No contributors found !!",
+                desc: err
             })
         }
 
@@ -37,7 +38,8 @@ exports.getContributorbyid = (req,res)=>{
         if(err)
         {
             return res.status(400).json({
-                error: "no contributor found"
+                error: "No contributor found !!",
+                desc: err
             })
         }
 
@@ -49,14 +51,12 @@ exports.getContributorbyid = (req,res)=>{
 // update the contributors by increasing the contribution count
 exports.IncreaseContributor = async (req,res) =>{    
     try{
-        
         const  contributor = await Contributor.findById(req.params.contId);
-
         console.log(contributor);
 
         if(!contributor)
         {
-            return res.status(400).json({error:"no data"});
+            return res.status(400).json({error:"No contributor found !!"});
         }
         contributor.count= contributor.count+1;
 
@@ -64,26 +64,26 @@ exports.IncreaseContributor = async (req,res) =>{
         await contributor.save();
         res.send(contributor);
     }
-    catch(error)
+    catch(err)
     {
-        res.status(400).json(error);
+        res.status(400).json({error: err});
     }
-
 }
+
 // delete contributor
 exports.deleteContributor = (req, res) => {
   Contributor.findByIdAndRemove(req.params.contId)
-    .then((tut) => {
-      if (!tut) return res.status(400).json({ error: "Contributor not found !!" });
-      res.status(200).json(tut);
+    .then((contributor) => {
+      if (!contributor) return res.status(400).json({ error: "Contributor not found !!" });
+      res.status(200).json(contributor);
     })
     .catch((err) => {
-      if (err) return res.status(500).json({ error: "contributor not found !!" });
+      if (err) return res.status(500).json({ error: "contributor not found !!", desc: err });
     });
 };
 
-// update the contributors by increasing the contribution count
-exports.updateContributors = async (req,res) =>{    
+// update the contributor
+exports.updateContributors = async (req,res) => {    
     try {
       const contributor = await Contributor.findByIdAndUpdate(
         req.params.contId,
@@ -91,14 +91,14 @@ exports.updateContributors = async (req,res) =>{
         { new: true }
       );
 
-      if (!contributor) return res.status(400).json({ error: "contributor not found !!" });
+      if (!contributor) return res.status(400).json({ error: "Contributor not found !!" });
       res.status(202).json({
         msg: "contributor Updated !!",
         desc: contributor,
       });
     }
      catch (err) {
-      res.status(400).json(err);
+      res.status(400).json({error: err});
     }
     
 }

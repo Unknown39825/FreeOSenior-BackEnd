@@ -3,8 +3,10 @@ const User = require("../../models/User/user");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sgMail = require("@sendgrid/mail");
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 var validator = require('validator');
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 //only admin can get list of all users
 exports.getUser = async (req, res) => {
   await User.find({})
@@ -12,7 +14,7 @@ exports.getUser = async (req, res) => {
       res.status(200).json(users);
     })
     .catch((err) => {
-      if (err) return res.status(500).json(err);
+      if (err) return res.status(500).json({error: err});
     });
 };
 
@@ -21,13 +23,10 @@ exports.registerUser = async (req, res) => {
         if ( !req.body.password || !req.body.email) {
           return res.status(400).json({ msg: "Either password/Email field is empty" });
         } 
-        // var validator = require('validator');
-
-// validator.isEmail('foo@bar.com'); //=> true
-
+     
         if(!validator.isEmail(req.body.email))
         {
-          return res.status(400).json({error:"invalid email"});
+          return res.status(400).json({error:"Invalid email !!"});
         }
         
         else {
@@ -43,7 +42,7 @@ exports.registerUser = async (req, res) => {
                 req.body.password,
                 async (err, user) => {
                   if (err) {
-                    console.log(err);
+                    console.log({error: err});
                     return res.status(400).json({error:"Email already exits"});
                   }
 
@@ -75,8 +74,7 @@ exports.registerUser = async (req, res) => {
                     
                   } catch (err) {
                     if (err) {
-                      res.status(500).json("Something went Wrong !!");
-                      
+                      res.status(500).json({error: "Something went Wrong !!",desc: err});
                       return;
                     }
                   }
@@ -90,17 +88,17 @@ exports.verifyEmail = async (req, res) => {
   try {
     const user = await User.findOne({ emailToken: req.query.token });
     if (!user) {
-      res.status(401).json("Token Invalid !!, Please try registering again !!");
+      res.status(401).json({error: "Token Invalid !!, Please try registering again !!"});
       res.redirect("/");
       return;
     }
-    user.emailToken = null; //detroying the token so that no one else can use this link again
+    user.emailToken = null;     //detroying the token so that no one else can use this link again
     user.isVerified = true;
     await user.save();
-    res.status(200).json({ status: "Email Verification Successfull !!" });
+    res.status(200).json({ status: "success", "msg" : "Email Verification Successfull !!" });
   } catch (error) {
     if (error) {
-      res.status(500).json({ status: "Something went Wrong !!", error: error });
+      res.status(500).json({ error: "Something went Wrong !!", desc: error });
       res.redirect("/");
       return;
     }
@@ -113,13 +111,13 @@ exports.loginUser = async (req, res) => {
     req.body.password
   );
   if (!user) {
-    return res.status(404).json({ msg: "Invalid Credentials !!" });
+    return res.status(404).json({ error: "Invalid Credentials !!" });
   }
   req.user = user;
   var token = await req.user.generateAuthToken();
   res.statusCode = 200;
   res.setHeader("Content-Type", "application/json");
-  res.json({ status: "You are successfully logged In !", token: token });
+  res.json({ status: "success" , "msg" : "You are successfully logged In !!", token: token });
   return;
 };
 
@@ -140,7 +138,7 @@ exports.logoutUser = async (req, res) => {
 
     res.status(200).json(req.user);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({error: error});
   }
 };
 
@@ -150,6 +148,6 @@ exports.logoutUserAll = async (req, res) => {
     await req.user.save();
     res.status(200).json("logout Success");
   } catch (error) {
-    res.status(500).send("unable to logout");
+    res.status(500).send({error: "unable to logout",desc: error});
   }
 };
