@@ -43,7 +43,7 @@ exports.registerUser = async (req, res) => {
                 async (err, user) => {
                   if (err) {
                     console.log({error: err});
-                    return res.status(400).json({error:"Email already exits"});
+                    return res.status(409).json({error:"Email already exits"});
                   }
 
                   const msg = {
@@ -117,7 +117,7 @@ exports.loginUser = async (req, res) => {
   var token = await req.user.generateAuthToken();
   res.statusCode = 200;
   res.setHeader("Content-Type", "application/json");
-  res.json({ status: "success" , "msg" : "You are successfully logged In !!", token: token });
+  res.json({ status: "success" , "msg" : "You are successfully logged In !!", token: token,admin:user.admin });
   return;
 };
 
