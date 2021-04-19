@@ -1,7 +1,8 @@
 const express= require("express");
-const { registerUser, getUser, loginUser,logoutUser, logoutUserAll, verifyEmail} = require("../../controllers/User/user");
+const { registerUser, getUser, loginUser,logoutUser, logoutUserAll, verifyEmail, googleLogin} = require("../../controllers/User/user");
 const router = express.Router();
 const {verifyAdmin, verifyUser,isVerifiedUser} = require('../../authenticate');
+const passport = require('passport');
 
 router.post("/signup",registerUser);
 router.get("/verify-email",verifyEmail);
@@ -18,6 +19,7 @@ router.post("/login",(req,res,next) => {
 
 router.get("/logout",verifyUser,logoutUser);
 router.get("/logoutall",verifyUser,logoutUserAll);
+router.post("/g-login",googleLogin);
 
 module.exports =router;
 

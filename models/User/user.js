@@ -21,6 +21,10 @@ var UserSchema = new Schema({
         type: String,
         unique: true
       },
+      googleId: {
+        type: String,
+        default: ''
+      },                   //google oauth ID
       emailToken: {
         type: String
       },

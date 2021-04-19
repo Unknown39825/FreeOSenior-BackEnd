@@ -3,6 +3,7 @@ var passport = require('passport');
 var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require('./models/User/user');
+var GoogleTokenStrategy = require('passport-google-token').Strategy;
 
 var opts = {
   jwtFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),// toe get token from the auth header
@@ -60,3 +61,4 @@ exports.isVerifiedUser = (req,res,next) => {
     }, (err) => next(err))
     .catch((err) => next(err)) 
 }
+

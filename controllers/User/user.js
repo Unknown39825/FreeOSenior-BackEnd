@@ -151,3 +151,44 @@ exports.logoutUserAll = async (req, res) => {
     res.status(500).send({error: "unable to logout",desc: error});
   }
 };
+
+exports.googleLogin = async (req, res) => {          //TODO
+
+  await User.findOne({email: req.body.email},async  (err, user) => {
+
+    if(user) {                                              //if same user as already registered without google auth
+      user.googleId=req.body.id;                             //set its google id
+      user.isVerified=true;
+      await user.save();
+      req.user=user;
+      var token = await req.user.generateAuthToken();
+      return res.status(200).json({ status: "success" , "msg" : "You are successfully logged In !!", token: token });
+    }
+
+    else {
+      var newUser = new User({                                   //register a new user
+        email: req.body.email,
+        firstname: req.body.givenName,
+        lastname: req.body.familyName,
+        googleId: req.body.id,
+        isVerified: true  
+      });
+      await newUser.save(async (err,user) => {
+        if(err) {
+          return res.status(400).json({error: err});
+        }
+        req.user=user;
+        var token = await req.user.generateAuthToken();
+        return res.status(200).json({ status: "success" , "msg" : "You are successfully logged In !!", token: token });
+      });
+      
+    }
+  });
+}
+    
+                                                    
+
+    
+
+
+
