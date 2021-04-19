@@ -43,7 +43,7 @@ exports.registerUser = async (req, res) => {
                 async (err, user) => {
                   if (err) {
                     console.log({error: err});
-                    return res.status(400).json({error:"Email already exits"});
+                    return res.status(409).json({error:"Email already exits"});
                   }
 
                   const msg = {
@@ -89,7 +89,7 @@ exports.verifyEmail = async (req, res) => {
     const user = await User.findOne({ emailToken: req.query.token });
     if (!user) {
       res.status(401).json({error: "Token Invalid !!, Please try registering again !!"});
-      res.redirect("/");
+      
       return;
     }
     user.emailToken = null;     //detroying the token so that no one else can use this link again
@@ -99,7 +99,90 @@ exports.verifyEmail = async (req, res) => {
   } catch (error) {
     if (error) {
       res.status(500).json({ error: "Something went Wrong !!", desc: error });
-      res.redirect("/");
+      
+      return;
+    }
+  }
+};
+//otp verification api
+exports.verifyOtp = async (req, res) => {
+  // console.log(req.body);
+  if (req.body.otp.trim() === "" || req.body.password.trim() === "" || req.body.email.trim() === ""
+  )
+  {
+    return res.status(400).json({error:"please fill the valid details"})
+  }
+    try {
+      const user = await User.findOne({
+        name: req.body.name,
+        emailToken: req.body.otp,
+      });
+      if (!user) {
+        res.status(401).json({ error: "Invalid otp or Email!" });
+        
+        return;
+      }
+      user.emailToken = null; //detroying the token so that no one else can use this link again
+      user.isVerified = true;
+     await user.setPassword(req.body.password,(err,user)=>{
+
+      if(err)
+      {
+        return res.status(200).json({error:"unable to set password"});
+      }
+      user.save();
+      
+      res
+        .status(200)
+        .json({ status: "success", msg: "Pasword validated success !!" });
+      })
+      
+    } catch (error) {
+      if (error) {
+        res.status(500).json({ error: "Something went Wrong !!", desc: error });
+        return;
+      }
+    }
+};
+
+// forgot password
+exports.forgotPassword = async (req, res) => {
+  console.log("forgot called");
+  console.log(req.body);
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      res.status(401).json({error: "Invalid Email"});
+      return;
+    }
+    var otp = Math.random()*1000000;
+    otp = parseInt(otp);
+    // console.log(otp);
+    user.emailToken = otp; //adding the otp
+
+     const msg = {
+       from: "freeosenior@gmail.com",
+       to: user.email,
+       subject: "FreeOSenior Password Reset",
+       text: `Hi there, Forgot Your Password!!,
+                        Enter the given otp to reset your password`,
+       html: `<h1>Hi there,</h1>
+                          <h2>Your OTP is :${otp}</h2>
+                          `,
+     };
+
+    user.isVerified = false;
+    await user.save();
+     await sgMail.send(msg); //calling sendgrid to send email to the user's mail
+                    return res.status(200).json({
+                      status: "success",
+                      msg:
+                        "Otp Sent Enter the otp",
+                      
+                    });
+  } catch (error) {
+    if (error) {
+      res.status(500).json({ error: "Something went Wrong !!", desc: error });
       return;
     }
   }
@@ -117,7 +200,7 @@ exports.loginUser = async (req, res) => {
   var token = await req.user.generateAuthToken();
   res.statusCode = 200;
   res.setHeader("Content-Type", "application/json");
-  res.json({ status: "success" , "msg" : "You are successfully logged In !!", token: token });
+  res.json({ status: "success" , "msg" : "You are successfully logged In !!", token: token,admin:user.admin });
   return;
 };
 
