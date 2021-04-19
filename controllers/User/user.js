@@ -245,7 +245,7 @@ exports.googleLogin = async (req, res) => {          //TODO
       await user.save();
       req.user=user;
       var token = await req.user.generateAuthToken();
-      return res.status(200).json({ status: "success" , "msg" : "You are successfully logged In !!", token: token });
+      return res.status(200).json({ status: "success" , "msg" : "You are successfully logged In !!", token: token ,admin:req.user.admin });
     }
 
     else {
@@ -262,16 +262,10 @@ exports.googleLogin = async (req, res) => {          //TODO
         }
         req.user=user;
         var token = await req.user.generateAuthToken();
-        return res.status(200).json({ status: "success" , "msg" : "You are successfully logged In !!", token: token });
+        return res.status(200).json({ status: "success" , "msg" : "You are successfully logged In !!", token: token,admin:req.user.admin });
       });
       
     }
   });
 }
     
-                                                    
-
-    
-
-
-
