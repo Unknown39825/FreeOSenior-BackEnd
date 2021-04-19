@@ -1,6 +1,6 @@
 const express= require("express");
-const { registerUser, getUser, loginUser,logoutUser, logoutUserAll, verifyEmail, googleLogin} = require("../../controllers/User/user");
-const { registerUser, getUser, loginUser,logoutUser, logoutUserAll, verifyEmail, forgotPassword, verifyOtp} = require("../../controllers/User/user");
+
+const { registerUser, getUser, loginUser,logoutUser, logoutUserAll, verifyEmail, forgotPassword, verifyOtp ,googleLogin} = require("../../controllers/User/user");
 const router = express.Router();
 const {verifyAdmin, verifyUser,isVerifiedUser} = require('../../authenticate');
 const passport = require('passport');
