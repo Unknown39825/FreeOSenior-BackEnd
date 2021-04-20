@@ -27,19 +27,14 @@ mongoose
   });
 
 const app = express();
+app.use(cors());
 
 //Middlewares
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(cors());
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+
+
+
 app.use(express.urlencoded({ extended: false }));
 mongoose.Promise = global.Promise;
 
