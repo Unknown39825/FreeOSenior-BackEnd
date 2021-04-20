@@ -1,18 +1,14 @@
 const mongoose = require('mongoose');
-
+var Schema = mongoose.Schema;
 const contributorSchema=mongoose.Schema({
-    name:{
-        type: String,
-        required: true
-    },
-    image: {
-        type: String,
-        
+    user:{
+        type:Schema.Types.ObjectId,
+        ref:"User"
     },
     count: {
         type: Number,
-        min: 0,
-        required: true
+        default:0,
+        
     }
 },
 {

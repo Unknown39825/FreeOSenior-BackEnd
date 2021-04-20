@@ -1,4 +1,5 @@
 const Event = require("../../models/HomePage/event");
+const { createContributor } = require("./contributors");
 
 //create Event
 exports.createEvent = (req, res) => {
@@ -9,6 +10,8 @@ exports.createEvent = (req, res) => {
         error: "Unable to save the Event !!",
         desc: err,
       });
+      
+      createContributor(req.user._id,5);
     res.json(data);
   });
 };

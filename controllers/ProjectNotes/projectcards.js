@@ -1,4 +1,5 @@
 const ProjectCard = require("../../models/ProjectNotes/projectcard");
+const { createContributor } = require("../HomePage/contributors");
 
 //create projectcard
 exports.createProjectCards = (req,res) => {
@@ -10,7 +11,7 @@ exports.createProjectCards = (req,res) => {
             error:"Unable to save this card !!",
             desc:err
         })
-        
+        createContributor(res.user._id,5);
         res.json(
              data
         );

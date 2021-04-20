@@ -1,4 +1,5 @@
 const Tutorial = require("../../models/Tutorials/turorial");
+const { createContributor } = require("../HomePage/contributors");
 
 //create tutorials
 exports.createTutorials = (req,res) => {
@@ -10,6 +11,7 @@ exports.createTutorials = (req,res) => {
             error:"Unable to save this tutorial !!",
             desc:err
         })
+        createContributor(req.user._id,8);
         res.json({
             "msg": "Tutorial Added !!",
             "desc": data

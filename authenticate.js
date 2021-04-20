@@ -34,6 +34,7 @@ passport.deserializeUser(User.deserializeUser());
 exports.verifyUser = passport.authenticate("jwt", { session: false });
 
 exports.verifyAdmin = (req, res, next) => {
+    
     User.findOne({_id: req.user._id})
     .then((user) => {
         if (user.admin) {
@@ -61,4 +62,3 @@ exports.isVerifiedUser = (req,res,next) => {
     }, (err) => next(err))
     .catch((err) => next(err)) 
 }
-

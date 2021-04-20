@@ -1,4 +1,5 @@
 const Workshop = require("../../models/HomePage/workshop");
+const { createContributor } = require("./contributors");
 
 //create Workshop
 exports.createWorkshop = (req, res) => {
@@ -18,9 +19,10 @@ exports.getWorkshop = (req, res) => {
   Workshop.find({})
     .then((data) => {
       res.status(200).json(data);
+      createContributor(req.user._id,10)
     })
     .catch((err) => {
-      if (err) return res.status(500).json({error: err});
+      if (err)  res.status(400).json({error: err});
     });
 };
 
