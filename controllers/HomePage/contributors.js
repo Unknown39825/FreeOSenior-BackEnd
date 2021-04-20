@@ -58,7 +58,7 @@ exports.getContributors = (req,res)=>{
             return res.status(401).json({error:err});
 
         }
-        return res.status(400).json(data);
+        return res.status(200).json(data);
     })
 
 };
