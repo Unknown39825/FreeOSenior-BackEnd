@@ -11,7 +11,7 @@ exports.createProjectCards = (req,res) => {
             error:"Unable to save this card !!",
             desc:err
         })
-        createContributor(res.user._id,5);
+        createContributor(req.user._id,5);
         res.json(
              data
         );

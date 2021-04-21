@@ -1,4 +1,5 @@
 const HomeCard = require("../../models/HomePage/homecard");
+const { createContributor } = require("./contributors");
 
 //create homecard
 exports.createHomeCards = (req,res) => {
@@ -10,6 +11,8 @@ exports.createHomeCards = (req,res) => {
             error:"Unable to save this card !!",
             desc:err
         })
+        createContributor(req.user._id, 8);
+
         res.json(data);
     });    
 };
