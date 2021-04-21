@@ -33,14 +33,13 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-
-
 app.use(express.urlencoded({ extended: false }));
 mongoose.Promise = global.Promise;
 
 app.use(passport.initialize());
 
 //My Routes
+
 app.use("/user",userRoutes);
 app.use("/api",contributorRoutes);
 app.use("/api",homecardRoutes);

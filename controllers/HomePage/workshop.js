@@ -18,8 +18,9 @@ exports.createWorkshop = (req, res) => {
 exports.getWorkshop = (req, res) => {
   Workshop.find({})
     .then((data) => {
-      res.status(200).json(data);
       createContributor(req.user._id,10)
+      res.status(200).json(data);
+      return;
     })
     .catch((err) => {
       if (err)  res.status(400).json({error: err});

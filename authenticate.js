@@ -3,7 +3,7 @@ var passport = require('passport');
 var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require('./models/User/user');
-var GoogleTokenStrategy = require('passport-google-token').Strategy;
+const GoogleStrategy = require("passport-google-oauth20");
 
 var opts = {
   jwtFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),// toe get token from the auth header
@@ -28,8 +28,48 @@ exports.jwtPassport = passport.use(new JwtStrategy(opts, async (req,jwt_payload,
     );
 }));
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+exports.googlePassport = passport.use(
+  new GoogleStrategy(
+    {
+      // options for strategy
+      callbackURL: "http://localhost:8000/user/auth/google/callback/",
+      clientID: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+    },
+    function (accessToken, refreshToken, profile, done) {
+      //console.log(accessToken, refreshToken, profile)
+      console.log("GOOGLE BASED OAUTH VALIDATION GETTING CALLED");
+      return done(null, profile);
+    }
+  )
+);
+
+passport.serializeUser(function (user, done) {
+  console.log("I should have jack ");
+  done(null, user);
+});
+passport.deserializeUser(function (obj, done) {
+  console.log("I wont have jack shit");
+  done(null, obj);
+});
+
+// conncent screen
+exports.googleAuthentication = passport.authenticate("google", {
+  scope: ["profile", "email"],
+});
+
+// redirectd call
+exports.googgleRedirect = (passport.authenticate('google'),(req,res)=>{
+  console.log("redirected", req.user);
+  let user = {
+    displayName: req.user.displayName,
+    name: req.user.name.givenName,
+    email: req.user._json.email,
+    provider: req.user.provider,
+  };
+  console.log(user);
+  // res.json(user);
+})
 
 exports.verifyUser = passport.authenticate("jwt", { session: false });
 

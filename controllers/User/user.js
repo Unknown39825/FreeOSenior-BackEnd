@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sgMail = require("@sendgrid/mail");
 var validator = require('validator');
+const passport = require("passport");
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -235,37 +236,77 @@ exports.logoutUserAll = async (req, res) => {
   }
 };
 
-exports.googleLogin = async (req, res) => {          //TODO
+exports.gauth = async (req, res) => {
+  // console.log("redirected", req.user);
+  let user = {
+    firstname: req.user.name.givenName,
+    lastname: req.user.name.familyName,
+    email: req.user._json.email,
+    googleId: req.user.id,
+  };
 
-  await User.findOne({email: req.body.email},async  (err, user) => {
+  User.findOne({ email: user.email }).exec(async (err, data) => {
+    try {
+      if (err) {
+        console.log("error");
+        return res.status(400).json({ error: err });
+      }
 
-    if(user) {                                              //if same user as already registered without google auth
-      user.googleId=req.body.id;                             //set its google id
-      user.isVerified=true;
-      await user.save();
-      req.user=user;
+      if (!data) {
+        console.log("user not found");
+        const newuser = new User(user);
+        newuser.verified = true;
+        req.user = newuser;
+      } else {
+        req.user = data;
+      }
+
+      await req.user.save();
       var token = await req.user.generateAuthToken();
-      return res.status(200).json({ status: "success" , "msg" : "You are successfully logged In !!", token: token ,admin:req.user.admin });
-    }
+      var admin = req.user.admin;
 
-    else {
-      var newUser = new User({                                   //register a new user
-        email: req.body.email,
-        firstname: req.body.givenName,
-        lastname: req.body.familyName,
-        googleId: req.body.id,
-        isVerified: true  
-      });
-      await newUser.save(async (err,user) => {
-        if(err) {
-          return res.status(400).json({error: err});
-        }
-        req.user=user;
-        var token = await req.user.generateAuthToken();
-        return res.status(200).json({ status: "success" , "msg" : "You are successfully logged In !!", token: token,admin:req.user.admin });
-      });
-      
+      const redirectURL = `${process.env.FRONTEND}/saveToken?JWT=${token}&admin=${admin}`;
+      res.redirect(redirectURL);
+    } catch (error) {
+      if (error) res.status(400).json({ error: error });
+      return;
     }
   });
-}
+};
+
+// exports.googleLogin = async (req, res) => {          //TODO
+
+//   await User.findOne({email: req.body.email},async  (err, user) => {
+
+//     if(user) {                                              //if same user as already registered without google auth
+//       user.googleId=req.body.id;                             //set its google id
+//       user.isVerified=true;
+//       await user.save();
+//       req.user=user;
+//       var token = await req.user.generateAuthToken();
+//       return res.status(200).json({ status: "success" , "msg" : "You are successfully logged In !!", token: token ,admin:req.user.admin });
+//     }
+
+//     else {
+//       var newUser = new User({                                   //register a new user
+//         email: req.body.email,
+//         firstname: req.body.givenName,
+//         lastname: req.body.familyName,
+//         googleId: req.body.id,
+//         isVerified: true  
+//       });
+//       await newUser.save(async (err,user) => {
+//         if(err) {
+//           return res.status(400).json({error: err});
+//         }
+//         req.user=user;
+//         var token = await req.user.generateAuthToken();
+        
+//         return res.status(200).json({ status: "success" , "msg" : "You are successfully logged In !!", token: token,admin:req.user.admin });
+
+//       });
+      
+//     }
+//   });
+// }
     
