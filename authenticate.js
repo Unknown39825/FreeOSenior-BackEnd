@@ -32,7 +32,7 @@ exports.googlePassport = passport.use(
   new GoogleStrategy(
     {
       // options for strategy
-      callbackURL: "http://localhost:8000/user/auth/google/callback/",
+      callbackURL: `https://free-o-senior.herokuapp.com/user/auth/google/callback/`,
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
     },
