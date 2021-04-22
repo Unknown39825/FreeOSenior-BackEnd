@@ -255,10 +255,11 @@ exports.gauth = async (req, res) => {
       if (!data) {
         console.log("user not found");
         const newuser = new User(user);
-        newuser.verified = true;
+        newuser.isVerified = true;
         req.user = newuser;
       } else {
         req.user = data;
+        req.user.isVerified=true;
       }
 
       await req.user.save();
