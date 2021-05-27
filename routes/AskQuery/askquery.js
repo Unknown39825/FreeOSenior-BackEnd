@@ -1,8 +1,9 @@
 const express= require("express");
-const {createQuery,updateQuery ,deleteQuery,markResolved,postComment,voteComment} = require("../../controllers/AskQuery/askqueries");
+const {createQuery,updateQuery ,deleteQuery,markResolved,postComment,voteComment,getQuery} = require("../../controllers/AskQuery/askqueries");
 const router = express.Router();
 const authenticate= require('../../authenticate');
 
+router.get("/query",getQuery);
 router.post("/query",authenticate.verifyUser,createQuery);
 router.put("/query/:qid",authenticate.verifyUser,updateQuery);
 router.delete("/query/:qid",authenticate.verifyUser,deleteQuery);

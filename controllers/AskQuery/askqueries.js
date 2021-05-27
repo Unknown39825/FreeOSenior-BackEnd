@@ -1,5 +1,17 @@
 const Query = require("../../models/AskQuery/askquery");
 
+//get all queries
+exports.getQuery = (req,res) => {
+    Query.find({}).populate("author","firstname lastname")
+    .then((queries)=> {
+        if(!queries) {
+            return res.status(404).json({"status": "No Queries Found !!"});
+        }
+        return res.status(200).json({"status": "Queries Found !!","data":queries});
+    })
+    
+}
+
 //Create a new Query
 exports.createQuery = async (req,res) => {
 
