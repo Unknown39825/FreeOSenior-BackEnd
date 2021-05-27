@@ -14,6 +14,7 @@ const WorkshopRoutes= require('./routes/HomePage/workshop');
 const projectcardRoutes = require('./routes/ProjectNotes/projectcard');
 const tutorialRoutes = require('./routes/Tutorials/tutorial');
 const userRoutes = require('./routes/Users/user');
+const queryRoutes = require('./routes/AskQuery/askquery');
 
 //DB Connection
 mongoose
@@ -47,6 +48,7 @@ app.use("/api",eventRoutes);
 app.use("/api",WorkshopRoutes);
 app.use("/api",projectcardRoutes);
 app.use("/api",tutorialRoutes);
+app.use("/api",queryRoutes);
 
 app.use("/",(req,res)=>{
   res.send("Welcome to FreeOSenior");

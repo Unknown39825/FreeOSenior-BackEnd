@@ -1,36 +1,6 @@
 const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-const voteSchema = mongoose.Schema({
-    user: {
-        type: Schema.Types.ObjectId,
-        ref:"User",
-        required: true
-    },
-    vote: {
-        type: Boolean
-    }
-},{
-    timestamps: true
-}
-);
-
-const commentSchema=mongoose.Schema({
-    author:{
-        type:Schema.Types.ObjectId,
-        ref:"User",
-        required: true
-    },
-    desc: {
-        type: String,
-        required: false,
-    },
-    votes: [voteSchema]
-},
-{
-    timestamps: true
-});
-
 const QuerySchema= mongoose.Schema({
 
     title: {
@@ -46,7 +16,33 @@ const QuerySchema= mongoose.Schema({
         ref:"User",
         required: true
     },
-    comments: [commentSchema],
+    isResolved: {
+        type: Boolean,
+        required: false,
+        default: false
+    }
+    ,
+    comments: [{
+        author:{
+            type:Schema.Types.ObjectId,
+            ref:"User",
+            required: true
+        },
+        desc: {
+            type: String,
+            required: false,
+        },
+        votes: [{
+            user: {
+               type: Schema.Types.ObjectId,
+               ref:"User",
+               required: true
+           },
+           vote: {
+               type: Boolean
+            }
+        }]
+    }],
     tag: {
         type: String,
         required: false
