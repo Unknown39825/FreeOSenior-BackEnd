@@ -31,5 +31,3 @@ router.put("/forgot",forgotPassword);
 router.put("/otp/verify",verifyOtp);
 
 module.exports =router;
-
-//TODO forgot passowrd api to be added
