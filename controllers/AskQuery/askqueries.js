@@ -1,13 +1,31 @@
 const Query = require("../../models/AskQuery/askquery");
 
 //get all queries
-exports.getQuery = (req,res) => {
-    Query.find({}).populate("author","firstname lastname")
-    .then((queries)=> {
+exports.getQuery = async (req,res) => {
+    Query.find({}).populate("author","firstname lastname").populate({path:'comments',populate:{path:'author',select:"firstname lastname"}})
+    .then(async (queries)=> {
         if(!queries) {
-            return res.status(404).json({"status": "No Queries Found !!"});
+            return res.status(401).json({"status": "No Queries Found !!"});
         }
-        return res.status(200).json({"status": "Queries Found !!","data":queries});
+        
+        return res.status(200).json(queries);
+    }).catch((err)=>{
+        return res.status(401).json(err);
+    })
+    
+}
+
+//get all queries
+exports.getQuerybyId = async (req,res) => {
+    Query.findById(req.params.qid).populate("author","firstname lastname").populate({path:'comments',populate:{path:'author',select:"firstname lastname"}})
+    .then(async (queries)=> {
+        if(!queries) {
+            return res.status(401).json({"status": "No Queries Found !!"});
+        }
+        
+        return res.status(200).json(queries);
+    }).catch((err)=>{
+        return res.status(401).json(err);
     })
     
 }
@@ -40,10 +58,9 @@ exports.createQuery = async (req,res) => {
         return;
     }
 
-       
 };
 
-//Create a new Query
+//update query
 exports.updateQuery = (req,res) => {
 
     Query.findOne({author: req.user._id , _id: req.params.qid})
@@ -208,4 +225,3 @@ catch(err) {
     
    }    
 }
-

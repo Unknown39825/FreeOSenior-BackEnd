@@ -52,7 +52,4 @@ const QuerySchema= mongoose.Schema({
     timestamps: true
 });
 
-
-
-
 module.exports=mongoose.model('Query',QuerySchema);
