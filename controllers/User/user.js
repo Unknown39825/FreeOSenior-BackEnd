@@ -268,7 +268,7 @@ exports.gauth = async (req, res) => {
 
       var userId= req.user._id;
 
-      const redirectURL = `${prcess.env.FRONTEND}/saveToken?JWT=${token}&admin=${admin}&userId=${userId}`;
+      const redirectURL = `${process.env.FRONTEND}/saveToken?JWT=${token}&admin=${admin}&userId=${userId}`;
       res.redirect(redirectURL);
     } catch (error) {
       console.log(error);
