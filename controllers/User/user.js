@@ -271,6 +271,7 @@ exports.gauth = async (req, res) => {
       const redirectURL = `${prcess.env.FRONTEND}/saveToken?JWT=${token}&admin=${admin}&userId=${userId}`;
       res.redirect(redirectURL);
     } catch (error) {
+      console.log(error);
       if (error) res.status(400).json({ error: error });
       return;
     }
