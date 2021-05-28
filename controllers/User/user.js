@@ -201,7 +201,7 @@ exports.loginUser = async (req, res) => {
   var token = await req.user.generateAuthToken();
   res.statusCode = 200;
   res.setHeader("Content-Type", "application/json");
-  res.json({ status: "success" , "msg" : "You are successfully logged In !!", token: token,admin:user.admin });
+  res.json({ status: "success" , "msg" : "You are successfully logged In !!", token: token,admin:user.admin,userId:user._id });
   return;
 };
 
@@ -266,7 +266,9 @@ exports.gauth = async (req, res) => {
       var token = await req.user.generateAuthToken();
       var admin = req.user.admin;
 
-      const redirectURL = `${process.env.FRONTEND}/saveToken?JWT=${token}&admin=${admin}`;
+      var userId= req.user._id;
+
+      const redirectURL = `${prcess.env.FRONTEND}/saveToken?JWT=${token}&admin=${admin}&userId=${userId}`;
       res.redirect(redirectURL);
     } catch (error) {
       if (error) res.status(400).json({ error: error });
