@@ -13,8 +13,8 @@ exports.createTutorials = (req,res) => {
         })
         createContributor(req.user._id,8);
         res.json({
-            "msg": "Tutorial Added !!",
-            "desc": data
+            msg: "Tutorial Added !!",
+            desc: data
         });
     });    
 };
@@ -46,7 +46,7 @@ exports.getTutorialsbyId = (req,res) => {
 exports.updateTutorials = async (req,res) => {
 
     if(!req.body.title || !req.body.link || !req.body.category)
-      return res.status(500).json({"msg":"fill all the fields"});
+      return res.status(400).json({error:"fill all the fields"});
       let tut;
     try 
     {
@@ -59,8 +59,8 @@ exports.updateTutorials = async (req,res) => {
         res.status(400).json({error: err});
     }
     res.status(202).json({
-        "msg":"Tutorial Updated !!",
-        "desc":tut
+        msg:"Tutorial Updated !!",
+        desc:tut
     });
 };
 
@@ -90,8 +90,8 @@ exports.markTutorials = (req,res) => {
            tut.likes=tut.likes-1;               //likes decremented
         tut.save();
         return res.status(202).json({
-            "msg":"Tutorial Updated !!",
-             "desc": tut
+            msg:"Tutorial Updated !!",
+             desc: tut
         });
     })
     .catch((err)=> {

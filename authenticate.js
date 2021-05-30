@@ -81,7 +81,7 @@ exports.verifyAdmin = (req, res, next) => {
             next();              //move ahead only if user is admin
         }
         else {
-            res.status(403).json({"msg" : "Admin access required !!"});
+            res.status(403).json({error : "Admin access required !!"});
             return next(res);
         } 
     }, (err) => next(err))
@@ -96,7 +96,7 @@ exports.isVerifiedUser = (req,res,next) => {
             next();              
         }
         else {
-            res.status(403).json({"msg" : "Your account has not been verified !!"});
+            res.status(403).json({error : "Your account has not been verified !!"});
             return next(res);
         } 
     }, (err) => next(err))

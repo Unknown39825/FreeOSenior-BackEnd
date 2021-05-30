@@ -24,7 +24,7 @@ exports.createContributor =async (userId,cnt)=>{
 
             const contributor = new Contributor({
                 user:userId,
-                cnt:cnt
+                count:cnt
             });
             await contributor.save();
             console.log("new contributor added");

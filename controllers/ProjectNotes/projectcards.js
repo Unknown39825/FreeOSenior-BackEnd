@@ -13,7 +13,8 @@ exports.createProjectCards = (req,res) => {
         })
         createContributor(req.user._id,5);
         res.json(
-             data
+             {msg: "project Card Added !!",
+            desc: data}
         );
     });    
 };
@@ -45,7 +46,7 @@ exports.getProjectCardsbyId = (req,res) => {
 exports.updateProjectCards = async (req,res) => {
 
     if(!req.body.title || !req.body.desc || !req.body.dlink || !req.body.sem)
-      return res.status(500).json({"msg":"fill all the fields"});
+      return res.status(400).json({msg:"fill all the fields"});
       console.log(req.params.cardId)
 
       let card;
@@ -87,8 +88,8 @@ exports.markProjectCards = (req,res) => {
            card.likes=card.likes-1;             //likes decremented
         card.save();
         return res.status(202).json({
-            "msg":"Card Updated !!",
-             "desc": card
+            msg:"Card Updated !!",
+             desc: card
         });
     })
     .catch((err)=> {

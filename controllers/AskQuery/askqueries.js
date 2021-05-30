@@ -10,7 +10,7 @@ exports.getQuery = async (req,res) => {
         
         return res.status(200).json(queries);
     }).catch((err)=>{
-        return res.status(401).json(err);
+        return res.status(401).json({error:err});
     })
     
 }
@@ -25,7 +25,7 @@ exports.getQuerybyId = async (req,res) => {
         
         return res.status(200).json(queries);
     }).catch((err)=>{
-        return res.status(401).json(err);
+        return res.status(401).json({error:err});
     })
     
 }
@@ -34,7 +34,7 @@ exports.getQuerybyId = async (req,res) => {
 exports.createQuery = async (req,res) => {
 
     if(!req.body.title || ! req.body.desc || !req.user) {
-        res.status(400).json({"error": "Incomplete Details"});
+        res.status(400).json({error: "Please fill the Requied details"});
         return;
     }
    
@@ -54,7 +54,7 @@ exports.createQuery = async (req,res) => {
         return;
     }
     catch(err) {
-        res.status(500).json({"error": err});
+        res.status(500).json({error: err});
         return;
     }
 
@@ -66,7 +66,7 @@ exports.updateQuery = (req,res) => {
     Query.findOne({author: req.user._id , _id: req.params.qid})
     .then(async (query)=> {
         if(!query) {
-            res.status(401).json({"error": "Query not found"});
+            res.status(401).json({error: "Query not found"});
             return;
         }
 
@@ -81,7 +81,7 @@ exports.updateQuery = (req,res) => {
         return;
        }
        catch(err) {
-        res.status(500).json({"error": err});
+        res.status(500).json({error: err});
         return;
        }
     })
@@ -94,18 +94,18 @@ exports.deleteQuery = (req,res) => {
     Query.findOne({author: req.user._id , _id: req.params.qid})
     .then(async (query)=> {
         if(!query) {
-            res.status(401).json({"error": "Query not found"});
+            res.status(401).json({error: "Query not found"});
             return;
         }
 
         try {
             await query.delete();
             console.log(query);
-            res.status(200).json({"status": "Deleted !!","query":query});
+            res.status(200).json({status: "Deleted !!",query:query});
             return;
        }
        catch(err) {
-        res.status(500).json({"error": err});
+        res.status(500).json({error: err});
         return;
        }
     })
@@ -117,7 +117,7 @@ exports.markResolved = (req,res) => {
     Query.findOne({author: req.user._id , _id: req.params.qid})
     .then(async (query)=> {
         if(!query) {
-            res.status(401).json({"error": "Query not found"});
+            res.status(401).json({error: "Query not found"});
             return;
         }
 
@@ -125,11 +125,11 @@ exports.markResolved = (req,res) => {
 
         try {
             await query.save();
-            res.status(200).json({"status": "Query Resolved !!","query":query});
+            res.status(200).json({status: "Query Resolved !!","query":query});
         return;
        }
        catch(err) {
-        res.status(500).json({"error": err});
+        res.status(500).json({error: err});
         return;
        }
     })
@@ -141,7 +141,7 @@ exports.postComment = (req,res) => {
     Query.findOne({_id: req.params.qid})
     .then(async (query)=> {
         if(!query) {
-            res.status(401).json({"error": "Cannot post comment. Query not found."});
+            res.status(401).json({error: "Cannot post comment. Query not found."});
             return;
         }
         
@@ -154,11 +154,11 @@ exports.postComment = (req,res) => {
     
         try {
             await query.save();
-            res.status(200).json({"status": "Comment Saved!!","query":query});
+            res.status(200).json({status: "Comment Saved!!","query":query});
         return;
        }
        catch(err) {
-        res.status(500).json({"error": err});
+        res.status(500).json({error: err});
         return;
        }
     })
@@ -173,12 +173,12 @@ try {
     await Query.findOne({_id: req.params.qid})
     .then(async (query)=> {
         if(!query) {
-            res.status(401).json({"error": "Cannot vote comment. Query not found."});
+            res.status(401).json({error: "Cannot vote comment. Query not found."});
             return;
         }
         
         if(!query.comments || !query.comments.some((comment)=> comment._id==req.params.cid)) {
-            res.status(401).json({"error": "Cannot vote comment. Comment not found."});
+            res.status(401).json({error: "Cannot vote comment. Comment not found."});
             return;
         }
         
@@ -221,7 +221,7 @@ try {
     })
 }
 catch(err) {
-    return res.status(500).json({"error": err});
+    return res.status(500).json({error: err});
     
    }    
 }

@@ -42,7 +42,7 @@ exports.getHomeCardbyId = (req,res) => {
 //update a homecard
 exports.updateHomeCards = async (req,res) => {
     if(!req.body.title || !req.body.seemore || !req.body.desc)
-      return res.status(500).json({"msg":"fill all the fields"});
+      return res.status(400).json({error:"fill all the fields"});
 
       let card;
     try 
@@ -56,7 +56,7 @@ exports.updateHomeCards = async (req,res) => {
         res.status(400).json({error: err});
     }
     res.status(202).json({
-        "msg":"Card Updated !!",
+        msg:"Card Updated !!",
         "desc":card
     });
 };

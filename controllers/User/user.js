@@ -22,7 +22,7 @@ exports.getUser = async (req, res) => {
 //anyone can register
 exports.registerUser = async (req, res) => {
         if ( !req.body.password || !req.body.email) {
-          return res.status(400).json({ msg: "Either password/Email field is empty" });
+          return res.status(400).json({ error: "Either password/Email field is empty" });
         } 
      
         if(!validator.isEmail(req.body.email))
@@ -44,7 +44,7 @@ exports.registerUser = async (req, res) => {
                 async (err, user) => {
                   if (err) {
                     console.log({error: err});
-                    return res.status(409).json({error:"Email already exits"});
+                    return res.status(400).json({error:"Email already exits"});
                   }
 
                   const msg = {
@@ -89,14 +89,14 @@ exports.verifyEmail = async (req, res) => {
   try {
     const user = await User.findOne({ emailToken: req.query.token });
     if (!user) {
-      res.status(401).json({error: "Token Invalid !!, Please try registering again !!"});
+      res.status(400).json({error: "Token Invalid !!, Please try registering again !!"});
       
       return;
     }
     user.emailToken = null;     //detroying the token so that no one else can use this link again
     user.isVerified = true;
     await user.save();
-    res.status(200).json({ status: "success", "msg" : "Email Verification Successfull !!" });
+    res.status(200).json({ status: "success", msg : "Email Verification Successfull !!" });
   } catch (error) {
     if (error) {
       res.status(500).json({ error: "Something went Wrong !!", desc: error });
@@ -119,7 +119,7 @@ exports.verifyOtp = async (req, res) => {
         emailToken: req.body.otp,
       });
       if (!user) {
-        res.status(401).json({ error: "Invalid otp or Email!" });
+        res.status(400).json({ error: "Invalid otp or Email!" });
         
         return;
       }
@@ -153,7 +153,7 @@ exports.forgotPassword = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
-      res.status(401).json({error: "Invalid Email"});
+      res.status(400).json({error: "Invalid Email"});
       return;
     }
     var otp = Math.random()*1000000;
@@ -201,7 +201,7 @@ exports.loginUser = async (req, res) => {
   var token = await req.user.generateAuthToken();
   res.statusCode = 200;
   res.setHeader("Content-Type", "application/json");
-  res.json({ status: "success" , "msg" : "You are successfully logged In !!", token: token,admin:user.admin,userId:user._id });
+  res.json({ status: "success" , msg : "You are successfully logged In !!", token: token,admin:user.admin,userId:user._id });
   return;
 };
 

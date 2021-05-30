@@ -57,6 +57,14 @@ UserSchema.methods.generateAuthToken = async function()
   return token;
 }
 
+UserSchema.methods.getPublicProfile = async function()
+{
+  const user = this;
+  
+  const data = {firstname:user.firstname,lastname:user.lastname,admin:user.admin,email:user.email,_id:user._id};
+  return data;
+}
+
 // plugin used for automatic hasing salting and password storage.
 UserSchema.plugin(passportLocalMongoose,{usernameField:"email"});
 module.exports = mongoose.model('User', UserSchema);
