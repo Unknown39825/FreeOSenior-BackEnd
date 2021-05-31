@@ -96,7 +96,7 @@ exports.isVerifiedUser = (req,res,next) => {
               res.status(400).json({error:"The given Email does not exists"});
               return next(res);     
         }
-        else if(user.isVerifiedUser)
+        else if(user.isVerified)
         {
           next();
         }
