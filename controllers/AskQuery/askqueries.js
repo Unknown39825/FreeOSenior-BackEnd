@@ -205,8 +205,44 @@ catch(err) {
  
 }
 
-exports.deleteComment = (req,res) => {
+//delete a comment(:cid) on a query (:qid) 
+exports.deleteComment = async (req,res) => {
+
+    try {
+        await Query.findOne({_id:req.params.qid})
+        .then(async (query)=> {
     
+            if(!query) {
+                res.status(401).json({error: "Cannot delete comment. Query not found."});
+                return;
+            }
+    
+            if(query.comments.some((comment)=> comment._id==req.params.cid)) {
+                var flag=false;
+               query.comments.map((comment)=> {
+                   
+                   if(comment._id==req.params.cid && JSON.stringify(comment.author)==JSON.stringify(req.user._id)) {
+                       flag=true;
+                         query.comments.pull({ _id: comment._id}) ;
+                         query.save();
+                         return res.status(200).json({status: "Comment deleted !!"});
+                         
+                   }
+               })
+               if(flag==false)
+                 return res.status(401).json({error: "you are not authorized to delete this Comment !!"});
+                
+            }
+            else {
+                return res.status(401).json({error: "No such comment found !!"});
+               
+            }
+        })
+    }
+    catch(err) {
+        return res.status(500).json({error: err});
+        
+       }   
 }
 
 //vote a comment on a query (:qid) comment(:cid)
