@@ -92,13 +92,22 @@ exports.isVerifiedUser = (req,res,next) => {
 
       User.findOne({email: req.body.email})
       .then((user) => {
-        if (user.isVerified) {
-            next();              
+        if (!user) {
+              res.status(400).json({error:"The given Email does not exists"});
+              return next(res);     
+        }
+        else if(user.isVerifiedUser)
+        {
+          next();
         }
         else {
             res.status(403).json({error : "Your account has not been verified !!"});
             return next(res);
         } 
     }, (err) => next(err))
-    .catch((err) => next(err)) 
+    .catch((err) => {
+       res.status(400).json({error:err});
+       return next(res);
+
+    }) 
 }
