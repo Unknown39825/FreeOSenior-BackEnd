@@ -1,5 +1,5 @@
 const express= require("express");
-const {createQuery,updateQuery,getQuerybyId ,deleteQuery,markResolved,postComment,voteComment,getQuery} = require("../../controllers/AskQuery/askqueries");
+const {createQuery,updateQuery,getQuerybyId ,deleteQuery,markResolved,postComment,voteComment,getQuery,updateComment} = require("../../controllers/AskQuery/askqueries");
 const router = express.Router();
 const authenticate= require('../../authenticate');
 
@@ -11,6 +11,7 @@ router.delete("/query/:qid",authenticate.verifyUser,deleteQuery);
 router.post("/comment/:qid",authenticate.verifyUser,postComment);
 router.get("/resolvequery/:qid",authenticate.verifyUser,markResolved);
 router.post("/votecomment/:qid/:cid",authenticate.verifyUser,voteComment);
+router.put("/updatecomment/:qid/:cid",authenticate.verifyUser,updateComment);
 //router.delete("/contributor/:contId",authenticate.verifyUser,authenticate.verifyAdmin,deleteContributor);
 
 module.exports =router;

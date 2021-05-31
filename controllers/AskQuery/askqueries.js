@@ -164,6 +164,51 @@ exports.postComment = (req,res) => {
     })
 }
 
+//update a comment(:cid) on a query (:qid) 
+exports.updateComment = async (req,res) => {
+ 
+    try {
+    await Query.findOne({_id:req.params.qid})
+    .then(async (query)=> {
+
+        if(!query) {
+            res.status(401).json({error: "Cannot update comment. Query not found."});
+            return;
+        }
+
+        if(query.comments.some((comment)=> comment._id==req.params.cid)) {
+            var flag=false;
+           query.comments.map((comment)=> {
+               
+               if(comment._id==req.params.cid && JSON.stringify(comment.author)==JSON.stringify(req.user._id)) {
+                   flag=true;
+                     comment.desc=req.body.desc;
+                     query.save();
+                     return res.status(200).json({status: "Comment updated !!"});
+                     
+               }
+           })
+           if(flag==false)
+             return res.status(401).json({error: "you are not authorized to update this Comment !!"});
+            
+        }
+        else {
+            return res.status(401).json({error: "No such comment found !!"});
+           
+        }
+    })
+}
+catch(err) {
+    return res.status(500).json({error: err});
+    
+   }   
+ 
+}
+
+exports.deleteComment = (req,res) => {
+    
+}
+
 //vote a comment on a query (:qid) comment(:cid)
 //vote flag is passed in body => true upvote & viceversa
 //it votes as well as upadates the vote in case same user is trying again
@@ -225,3 +270,4 @@ catch(err) {
     
    }    
 }
+
