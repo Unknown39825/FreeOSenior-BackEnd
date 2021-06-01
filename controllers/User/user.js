@@ -190,19 +190,33 @@ exports.forgotPassword = async (req, res) => {
 };
 
 exports.loginUser = async (req, res) => {
-  const { user } = await User.authenticate()(
-    req.body.email,
-    req.body.password
-  );
-  if (!user) {
-    return res.status(404).json({ error: "Invalid Credentials !!" });
+
+  try {
+    const { user } = await User.authenticate()(
+      req.body.email,
+      req.body.password
+    );
+    if (!user) {
+      return res.status(404).json({ error: "Invalid Credentials !!" });
+    }
+    req.user = user;
+    var token = await req.user.generateAuthToken();
+    res.statusCode = 200;
+    res.setHeader("Content-Type", "application/json");
+    res.json({
+      status: "success",
+      msg: "You are successfully logged In !!",
+      token: token,
+      admin: user.admin,
+      userId: user._id,
+    });
+    return;
+    
+  } catch (error) {
+
+    return res.status(400).json({error:"User Not found "});
+    
   }
-  req.user = user;
-  var token = await req.user.generateAuthToken();
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "application/json");
-  res.json({ status: "success" , msg : "You are successfully logged In !!", token: token,admin:user.admin,userId:user._id });
-  return;
 };
 
 exports.logoutUser = async (req, res) => {
