@@ -26,6 +26,10 @@ const projectSchema=mongoose.Schema({
         type: Number,
         required: true,
         min: 1
+    },
+    isProject:{
+        type:Boolean,
+        default:false
     }
 },
 {
