@@ -2,7 +2,7 @@ const express= require("express");
 require("dotenv").config();
 const { registerUser, getUser, loginUser,logoutUser, logoutUserAll, verifyEmail, forgotPassword, verifyOtp, gauth} = require("../../controllers/User/user");
 const router = express.Router();
-const {verifyAdmin, verifyUser,isVerifiedUser, googleAuthentication, googgleRedirect} = require('../../authenticate');
+const {verifyAdmin, verifyUser,isVerifiedUser, googleAuthentication, googgleRedirect,verifyToken} = require('../../authenticate');
 const passport = require('passport');
 const User = require("../../models/User/user");
 
@@ -29,5 +29,7 @@ router.get("/logoutall",verifyUser,logoutUserAll);
 // router.post("/g-login",googleLogin);
 router.put("/forgot",forgotPassword);
 router.put("/otp/verify",verifyOtp);
+
+router.get("/auth",verifyToken);
 
 module.exports =router;

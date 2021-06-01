@@ -4,6 +4,7 @@ var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require('./models/User/user');
 const GoogleStrategy = require("passport-google-oauth20");
+const jwt = require("jsonwebtoken");
 
 var opts = {
   jwtFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),// toe get token from the auth header
@@ -101,4 +102,24 @@ exports.isVerifiedUser = (req,res,next) => {
         } 
     }, (err) => next(err))
     .catch((err) => next(err)) 
+}
+
+exports.verifyToken = (req,res) => {
+  
+  if(!opts.jwtFromRequest(req)) {
+     return res.status(404).json({success: false, error: 'Token Missing !!'});
+  }
+  
+  else {
+
+    jwt.verify(opts.jwtFromRequest(req),process.env.secretKey,(err,decoded) => {
+      if(err) {
+        return res.status(401).json({success: false, error: err.message , status: err.name});
+      }
+      if(!decoded) {
+        return res.status(500).json({success: false, error: 'Something went wrong'});
+      }
+      return res.status(200).json({success: true, status: 'Token Valid !!',user: decoded._id});
+    })
+  } 
 }
