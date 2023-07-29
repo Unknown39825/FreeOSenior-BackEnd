@@ -50,9 +50,13 @@ app.use("/api",projectcardRoutes);
 app.use("/api",tutorialRoutes);
 app.use("/api",queryRoutes);
 
-app.use("/",(req,res)=>{
-  res.send("Welcome to FreeOSenior");
-})
+if (true) {
+  app.use(express.static("client/public"));
+  const path = require("path");
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "public", "index.html"));
+  });
+}
 
 const port = process.env.PORT || 8000;
 

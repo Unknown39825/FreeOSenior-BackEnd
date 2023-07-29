@@ -13,7 +13,6 @@ var opts = {
 };
 
 exports.jwtPassport = passport.use(new JwtStrategy(opts, async (req,jwt_payload,done) => {
-  
     User.findOne(
       { _id: jwt_payload._id, "tokens.token": opts.jwtFromRequest(req)},
       (err, user) => {
@@ -33,7 +32,7 @@ exports.googlePassport = passport.use(
   new GoogleStrategy(
     {
       // options for strategy
-      callbackURL: `https://free-o-senior.herokuapp.com/user/auth/google/callback/`,
+      callbackURL: `/user/auth/google/callback/`,
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
     },
@@ -75,13 +74,11 @@ exports.googgleRedirect = (passport.authenticate('google'),(req,res)=>{
 exports.verifyUser = passport.authenticate("jwt", { session: false });
 
 exports.verifyAdmin = (req, res, next) => {
-    
     User.findOne({_id: req.user._id})
     .then((user) => {
         if (user.admin) {
             next();              //move ahead only if user is admin
-        }
-        else {
+        } else {
             res.status(403).json({error : "Admin access required !!"});
             return next(res);
         } 
@@ -90,18 +87,14 @@ exports.verifyAdmin = (req, res, next) => {
 }
 
 exports.isVerifiedUser = (req,res,next) => {
-
       User.findOne({email: req.body.email})
       .then((user) => {
         if (!user) {
               res.status(400).json({error:"The given Email does not exists"});
               return next(res);     
-        }
-        else if(user.isVerified)
-        {
+        } else if(user.isVerified) {
           next();
-        }
-        else {
+        } else {
             res.status(403).json({error : "Your account has not been verified !!"});
             return next(res);
         } 
@@ -109,25 +102,24 @@ exports.isVerifiedUser = (req,res,next) => {
     .catch((err) => {
        res.status(400).json({error:err});
        return next(res);
-
     }) 
 }
 
 exports.verifyToken = (req,res) => {
-  
   if(!opts.jwtFromRequest(req)) {
      return res.status(404).json({success: false, error: 'Token Missing !!'});
   }
   
   else {
-
     jwt.verify(opts.jwtFromRequest(req),process.env.secretKey,(err,decoded) => {
       if(err) {
         return res.status(401).json({success: false, error: err.message , status: err.name});
       }
+
       if(!decoded) {
         return res.status(500).json({success: false, error: 'Something went wrong'});
       }
+
       return res.status(200).json({success: true, status: 'Token Valid !!',user: decoded._id});
     })
   } 
