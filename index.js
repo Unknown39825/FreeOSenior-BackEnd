@@ -19,9 +19,7 @@ const queryRoutes = require('./routes/AskQuery/askquery');
 //DB Connection
 mongoose
   .connect(process.env.DATABASE, {
-    useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true,
   })
   .then(() => {
     console.log("DB CONNECTED");
@@ -50,7 +48,7 @@ app.use("/api",projectcardRoutes);
 app.use("/api",tutorialRoutes);
 app.use("/api",queryRoutes);
 
-if (true) {
+if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/dist"));
   const path = require("path");
   app.get("*", (req, res) => {
