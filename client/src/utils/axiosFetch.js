@@ -1,4 +1,4 @@
-const axios = require("axios")
+import axios from "axios"
 let access_token =
   typeof window !== "undefined"
     ? localStorage.getItem("Authorization") ||

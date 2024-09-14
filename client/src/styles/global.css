@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Arvo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Livvic:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Livvic:wght@300&family=Odibee+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Livvic:wght@300&family=Nunito:wght@300&family=Odibee+Sans&display=swap');
 html,body
 {
     width: 100%;
-    
     margin: 0px;
     padding: 0px;
     overflow-x: hidden; 
@@ -22,8 +25,3 @@ a{
 { 
   left: 0px !important
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Arvo&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Livvic:wght@300&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Livvic:wght@300&family=Odibee+Sans&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Livvic:wght@300&family=Nunito:wght@300&family=Odibee+Sans&display=swap');

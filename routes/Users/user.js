@@ -11,11 +11,11 @@ router.get("/verify-email",verifyEmail);
 router.get("/all",verifyUser,verifyAdmin,getUser);
 
 router.post("/login",(req,res,next) => {
-    if(!req.body.email || !req.body.password)
-  {
+  console.log("loggin req")
+  
+    if(!req.body.email || !req.body.password) {
     res.status(400).json({msg: "Either email or password field is empty"});
-  }
-  else
+  } else
    next();
   },isVerifiedUser,loginUser);             //only verified user can login
 
