@@ -2,11 +2,9 @@ require("dotenv").config();
 const User = require("../../models/User/user");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const sgMail = require("@sendgrid/mail");
 var validator = require("validator");
 const passport = require("passport");
-
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const { sendEmail } = require("../../utils");
 
 //only admin can get list of all users
 exports.getUser = async (req, res) => {
@@ -60,7 +58,7 @@ exports.registerUser = async (req, res) => {
       user.hash = undefined;
       user.emailToken = undefined;
       try {
-        await sgMail.send(msg); //calling sendgrid to send email to the user's mail
+        await sendEmail(msg); //calling sendgrid to send email to the user's mail
         return res.status(200).json({
           status: "success",
           msg: "Thanks for Registering !! Please check your email for verification",
@@ -171,7 +169,7 @@ exports.forgotPassword = async (req, res) => {
 
     user.isVerified = false;
     await user.save();
-    await sgMail.send(msg); //calling sendgrid to send email to the user's mail
+    await sendEmail(msg); //calling sendgrid to send email to the user's mail
     return res.status(200).json({
       status: "success",
       msg: "Otp Sent Enter the otp",
