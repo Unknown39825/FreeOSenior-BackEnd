@@ -13,17 +13,17 @@ import SendIcon from "@mui/icons-material/Send"
 import { useSelector } from "react-redux"
 const useStyles = makeStyles({
   root: {
-    borderRadius: 30,
+    borderRadius: "30px !important",
   },
   title: {
     fontFamily: "serif",
   },
   textfield: {
-    margin: "20px auto",
+    margin: "20px auto !important",
     borderRadius: 20,
   },
   button: {
-    background: "linear-gradient(45deg, #af58f5 30%, #901af0  90%)",
+    background: "linear-gradient(45deg, #af58f5 30%, #901af0  90%) !important",
     boxShadow: "0 3px 5px 2px rgba(181, 99, 247, .3)",
     color: "white",
     borderRadius: 3,
@@ -84,7 +84,7 @@ const PostQuestion = ({ setReload = f => f, reload }) => {
       >
         <Grid container wrap="nowrap" spacing={2}>
           <Grid justifyContent="left" item xs zeroMinWidth>
-            <Typography align="center" variant="h2" className={classes.title}>
+            <Typography align="center" variant="h4" className={classes.title}>
               Ask A Query
             </Typography>
 

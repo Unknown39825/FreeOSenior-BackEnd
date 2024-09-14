@@ -7,7 +7,7 @@ import Logo from "./../../images/gatsby-icon.png"
 
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import ThemeToggle from "../../utils/ThemeToggle"
+import ThemeToggle from "../../styles/ThemeToggle"
 const useStyles = makeStyles(theme => ({
   root: {
     width: "250px",

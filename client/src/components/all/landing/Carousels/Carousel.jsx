@@ -1,51 +1,51 @@
-import React, { useState, useEffect } from "react"
-import Slider from "react-slick"
-import { settings } from "./HomeCarouselSettings"
-import HomeCard from "./HomeCard"
+import React, { useState, useEffect } from "react";
+import Slider from "react-slick";
+import { settings } from "./HomeCarouselSettings";
+import HomeCard from "./HomeCard";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import styled from "styled-components"
-import axiosFetch from "../../../../utils/axiosFetch"
+import Box from "@mui/material/Box";
+import { makeStyles, useTheme } from "@mui/styles";
+import axiosFetch from "../../../../utils/axiosFetch";
 
-const SliderWrap = styled.div`
-  .slick-slider {
-    .slick-list {
-      padding-bottom: 30px;
-    }
+const useStyles = makeStyles(() => ({
+  slickSlider: {
+    "& .slick-list": {
+      paddingBottom: "30px",
+    },
+    "& .slick-dots li button::before": {
+      fontSize: "12px",
+    },
+  },
+}));
 
-    .slick-dots li button::before {
-      font-size: 12px;
-    }
-  }
-
-`
-
-const CarouselCards = props => {
-  const theme = props.theme
-  const [data, getData] = useState([])
+const CarouselCards = (props) => {
+  const theme = useTheme();
+  const [data, getData] = useState([]);
+  const classes = useStyles();
 
   useEffect(() => {
-    const fetchdata = async () => {
+    const fetchData = async () => {
       try {
-        const res = await axiosFetch.get("api/homecard")
+        const res = await axiosFetch.get("api/homecard");
 
         if (res.data) {
-          getData(res.data)
+          getData(res.data);
         }
       } catch (error) {
-        console.log(error)
-        console.log(error?.response?.data?.error)
+        console.log(error);
+        console.log(error?.response?.data?.error);
       }
-    }
+    };
 
-    fetchdata()
-  }, [])
+    fetchData();
+  }, []);
 
   return (
-    <div style={{ width: "80vw", position: "relative" }}>
-      <SliderWrap>
+    <Box sx={{ width: "80vw", position: "relative" }}>
+      <Box className={classes.slickSlider}>
         <Slider {...settings}>
-          {data.map(dataValue => (
+          {data.map((dataValue) => (
             <HomeCard
               data-aos="fade-down"
               key={dataValue._id}
@@ -56,12 +56,10 @@ const CarouselCards = props => {
               seemore={dataValue.seemore}
             />
           ))}
-          {/* {console.log(data.thumbnail.small)}
-          <HomeCard key={data.id} thumbnail={data.thumbnail.small} title={data.title} content={data.content}/> */}
         </Slider>
-      </SliderWrap>
-    </div>
-  )
-}
+      </Box>
+    </Box>
+  );
+};
 
-export default CarouselCards
+export default CarouselCards;

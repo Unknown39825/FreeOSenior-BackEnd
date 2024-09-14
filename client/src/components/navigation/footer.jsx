@@ -71,9 +71,11 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "#2b2b2b",
     color: "#fff",
     padding: "50px 100px",
-    margin: "0",
+    margin: "0px",
     width : "100%",
     maxWidth: "inherit",
+    // marginTop: "-30px",
+
     boxShadow: "none",
     fontFamily: "'Arvo', serif",
     [theme.breakpoints.down("sm")]: {

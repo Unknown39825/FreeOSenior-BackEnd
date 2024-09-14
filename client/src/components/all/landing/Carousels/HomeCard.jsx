@@ -1,9 +1,9 @@
 import React from "react"
-import { Button } from "@mui/material"
+import { Button, useTheme } from "@mui/material"
 import "./HomeCard.css"
 
 const HomeCard = props => {
-  const theme = props.theme.theme
+  const theme = useTheme();
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>

@@ -1,22 +1,20 @@
 import React from "react"
-import { Typography, Paper, Grid,  } from "@mui/material"
+import { Typography, Paper, Grid, useTheme,  } from "@mui/material"
 import imageLight from "../../../images/growing-plant-light.png"
 import imageDark from "../../../images/growing-plant-dark.png"
 import { makeStyles } from "@mui/styles"
 
-const useStyles = makeStyles(() => ({
-  root: props => {
-    return ({
-      borderRadius: 0,
-      height: '45vw',
-      backgroundImage: true ? `url(${imageLight})` : `url(${imageDark})`,
-      backgroundPosition: "center",
-      backgroundSize: "cover"
-    })
-  }
+const useStyles = makeStyles((theme) => ({
+  root: props => ({
+    borderRadius: 0,
+    height: '45vw',
+    backgroundImage: props.light ? `url(${imageLight})` : `url(${imageDark})`,
+    backgroundPosition: "center",
+    backgroundSize: "cover"
+  })
 }));
 const Frame1 = props => {
-  const theme = props.theme
+  const theme = useTheme();
   const classes = useStyles(theme)
   return (
     <>

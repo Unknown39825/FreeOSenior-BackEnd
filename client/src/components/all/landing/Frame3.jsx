@@ -1,5 +1,5 @@
 import {  Paper, Typography } from "@mui/material"
-import { makeStyles } from "@mui/styles"
+import { makeStyles, useTheme } from "@mui/styles"
 import React from "react"
 import CarouselCards from "./Carousels/Carousel"
 import imageLight from "../../../images/blueTexture2.jpg"
@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function Frame3(props) {
-  const theme = props.theme
+  const theme = useTheme();
   const classes = useStyles(theme)
 
   return (

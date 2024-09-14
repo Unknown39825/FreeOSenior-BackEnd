@@ -24,7 +24,7 @@ const useStyles = makeStyles({
     padding: "40px 20px",
     marginTop: 20,
     marginBottom: 40,
-    borderRadius: 20,
+    borderRadius: "30px !important",
   },
   title: {
     fontFamily: "serif",
@@ -140,16 +140,17 @@ const Question = ({
         </Grid>
 
         <Grid justifyContent="left" item xs zeroMinWidth>
-          <Typography variant="h3">
+          <Typography variant="h4">
             {data.title}
             <Chip
               className={
                 data.isResolved ? classes.chipResolve : classes.chipUnResolve
               }
+
               label={data.isResolved ? "Resolved" : "Not Resolved"}
             />
           </Typography>
-          <Typography variant="h5">
+          <Typography variant="h6">
             {data?.author?.firstname} {data?.author?.lastname}
           </Typography>
           <InputBase
@@ -168,7 +169,7 @@ const Question = ({
           </Typography>
         </Grid>
       </Grid>
-      <Typography variant="h4" style={{ marginTop: 10 }}>
+      <Typography variant="h6" style={{ marginTop: 10 }}>
         Comments: {data.comments.length}
       </Typography>
       <IconButton

@@ -10,7 +10,7 @@ import { makeStyles } from "@mui/styles"
 
 const useStyles = makeStyles({
   root: {
-    borderRadius: 30,
+    borderRadius: "30px !important",
   },
   title: {
     fontFamily: "serif",
@@ -53,7 +53,7 @@ const SearchQuestion = ({ setSearch = f => f, search = "" }) => {
       >
         <Grid container wrap="nowrap" spacing={2}>
           <Grid justifyContent="left" item xs zeroMinWidth>
-            <Typography align="center" variant="h2" className={classes.title}>
+            <Typography align="center" variant="h4" className={classes.title}>
               Search your Query
             </Typography>
 

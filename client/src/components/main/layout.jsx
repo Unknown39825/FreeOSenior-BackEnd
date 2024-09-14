@@ -4,7 +4,16 @@ import Footer from "../navigation/footer"
 import styles from "./layout.module.css"
 import AOS from "aos"
 import "aos/dist/aos.css"
-import { StylesProvider } from "@mui/styles"
+import { makeStyles, StylesProvider, useTheme } from "@mui/styles"
+
+const useStyles = makeStyles((theme) => ({
+  root: props => ({
+    borderRadius: 0,
+    backgroundColor: theme.palette.background.paper,
+    color: theme.palette.text.primary,
+    paddingBottom : "5vh",
+  })
+}));
 
 const Layout = props => {
   useEffect(() => {
@@ -14,10 +23,13 @@ const Layout = props => {
     })
   }, [])
 
+  const theme = useTheme()
+  const classes = useStyles(theme)
+
   return (
     <StylesProvider injectFirst>
         <Header />
-        <div className={styles.container}>{props.children}</div>
+        <div className={classes.root} >{props.children}</div>
         <Footer />
     </StylesProvider>
   )

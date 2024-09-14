@@ -46,7 +46,7 @@ const PostAnswer = ({ qid, setReload = f => f, reload }) => {
 
       <Grid container wrap="nowrap" spacing={2} style={{ margin: "20px auto" }}>
         <Grid justifyContent="left" item xs zeroMinWidth>
-          <Typography variant="h3" style={{ margin: 5 }}>
+          <Typography variant="h5" style={{ margin: 5 }}>
             Your answer
           </Typography>
           <TextField

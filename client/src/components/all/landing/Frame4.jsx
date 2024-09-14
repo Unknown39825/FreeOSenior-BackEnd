@@ -1,10 +1,11 @@
 import React from "react"
 import Typography from "@mui/material/Typography"
 import "../../../styles/global.css"
+import { makeStyles, useTheme } from "@mui/styles";
 
 const Frame4 = () => {
   return (
-    <div style={{ margin: "4vh 2vw" }}>
+    <div style={{ margin: "4vh 2vw" }} >
       <Typography
         variant="h1"
         component="h2"

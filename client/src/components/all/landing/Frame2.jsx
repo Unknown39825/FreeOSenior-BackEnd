@@ -1,12 +1,11 @@
 import React from "react"
-import { makeStyles } from "@mui/styles"
+import { makeStyles, useTheme } from "@mui/styles"
 
 const useStyles = makeStyles(theme => ({
   root: props => ({
     textAlign: "center",
     backgroundColor: props.background,
     paddingTop: "10vh",
-    
     paddingBottom: "10vh",
   }),
   heading: props => ({
@@ -27,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Frame2 = props => {
-  const theme = props.theme
+  const theme = useTheme();
   const classes = useStyles(theme)
 
   return (

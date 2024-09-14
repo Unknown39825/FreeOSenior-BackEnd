@@ -12,18 +12,18 @@ import MenuIcon from "@mui/icons-material/Menu"
 import IconButton from "@mui/material/IconButton"
 import Drawer from "./drawer"
 import AuthModel from "../auth"
-import { Grid2 } from "@mui/material"
+import { Grid2, useTheme } from "@mui/material"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import { chosenTheme } from "../../theme"
-import ThemeToggle from "../../utils/ThemeToggle"
+import { Container, Grid } from "@mui/system"
+import ThemeToggle from "../../styles/ThemeToggle"
 const useStyles = makeStyles(theme => ({
   innerNav: props => ({
     margin: "0 auto",
     color: props.textDark,
   }),
   menuButton: {
-    marginRight: "1rem",
+    marginRight: theme.spacing(2),
   },
   navItem: props => ({
     cursor: "pointer",
@@ -65,8 +65,8 @@ const useStyles = makeStyles(theme => ({
 
 const Navbar = () => {
   const state = useSelector(({ auth }) => auth)
-  const theme = chosenTheme;
-  const classes = useStyles(chosenTheme)
+  const theme = useTheme();
+  const classes = useStyles(theme)
   const trigger = useScrollTrigger({
     threshold: 30,
     disableHysteresis: true,
@@ -88,10 +88,10 @@ const Navbar = () => {
         }}
         elevation={trigger ? 4 : 0}
       >
-        <div  className="">
+        <Container maxWidth="lg">
           <Toolbar style={{ minHeight: 60 }}>
             <div style={{ width: "100%" }}>
-              <Grid2
+              <Grid
                 container
                 spacing={1}
                 direction="row"
@@ -99,7 +99,7 @@ const Navbar = () => {
                 alignItems="center"
                 alignContent="center"
               >
-                <Grid2 item>
+                <Grid item>
                   <Hidden mdUp>
                     <IconButton
                       aria-label="openNav"
@@ -145,9 +145,9 @@ const Navbar = () => {
                       </Hidden>
                     </Box>
                   </Link>
-                </Grid2>
+                </Grid>
 
-                <Grid2 item>
+                <Grid item>
                   <Hidden smDown>
                     <Link
                       className={classes.navItem}
@@ -190,23 +190,23 @@ const Navbar = () => {
                       </Link>
                     )}
                   </Hidden>
-                </Grid2>
+                </Grid>
 
-                <Grid2 item>
+                <Grid item>
                   <Hidden smDown>
                     <AuthModel />
                   </Hidden>
-                </Grid2>
+                </Grid>
 
-                <Grid2 item>
+                <Grid item>
                   <Hidden smDown>
                     <ThemeToggle />
                   </Hidden>
-                </Grid2>
-              </Grid2>
+                </Grid>
+              </Grid>
             </div>
           </Toolbar>
-        </div>
+        </Container>
       </AppBar>
     </div>
   )

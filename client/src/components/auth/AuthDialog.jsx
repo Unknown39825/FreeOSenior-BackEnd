@@ -14,12 +14,14 @@ import Snackbar from "@mui/material/Snackbar"
 import SnackbarContent from "@mui/material/SnackbarContent"
 import IconButton from "@mui/material/IconButton"
 import CloseIcon from "@mui/icons-material/Close"
+import { useTheme } from "@mui/styles"
 
 export default function AuthModal({ index, setIndex, open, setOpen }) {
   const [snackbar, setSnackbar] = useState(false)
   const [snackColor, setSnackColor] = useState(false)
   const [snackbarmsg, setSnackbarmsg] = useState("")
   const [transition, setTransition] = useState(undefined)
+  const theme = useTheme();
   const closeDialog = () => {
     setOpen(false)
   }
@@ -30,6 +32,7 @@ export default function AuthModal({ index, setIndex, open, setOpen }) {
     setSnackbarmsg,
     setTransition,
   }
+
   const snackbarClose = () => {
     setSnackbar(false)
   }
@@ -105,7 +108,7 @@ export default function AuthModal({ index, setIndex, open, setOpen }) {
             centered
             value={index}
             indicatorColor="primary"
-            textColor="primary"
+            textColor={`${theme.palette.primary.main}`}
             onChange={(_, i) => {
               setIndex(i)
             }}

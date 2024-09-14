@@ -2,8 +2,6 @@ import React from "react"
 import Layout from "../components/main/layout"
 import Protected from "../components/adminPanel/Protected"
 import { useSelector } from "react-redux"
-import KommunicateChat from "../chat"
-import { chosenTheme } from "../theme"
 const AdminPanel = () => {
   const state = useSelector(({ auth }) => auth)
 
@@ -11,9 +9,7 @@ const AdminPanel = () => {
     return (
       <>
         <Layout>
-          <ThemeProvider theme={chosenTheme}>
-            <Protected theme={chosenTheme} />
-          </ThemeProvider>
+            <Protected  />
           {/* <KommunicateChat /> */}
         </Layout>
       </>

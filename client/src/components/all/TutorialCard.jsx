@@ -1,48 +1,31 @@
-import React from "react"
-import { css } from '@emotion/react'
-import Card from "@mui/material/Card"
-import CardMedia from "@mui/material/CardMedia"
-import CardContent from "@mui/material/CardContent"
-import CardActionArea from "@mui/material/CardActionArea"
-import Typography from "@mui/material/Typography"
-import Grid from "@mui/material/Grid"
+import React from "react";
+import { css } from "@emotion/react";
+import { useTheme } from "@mui/material/styles";
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import CardActionArea from "@mui/material/CardActionArea";
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
 
-const useStyles = {
-  root: css`
-    margin: auto;
-    border-radius: 16px; /* 16px */
-    transition: 0.3s;
-    box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
-    position: relative;
-    max-width: 500px;
-    margin-left: auto;
-    overflow: initial;
-    background: #ffffff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 16px;
-    @media (min-width: 768px) {
-      flex-direction: row;
-      padding-top: 16px;
-    }
+const TutorialCard = (props) => {
+  const theme = useTheme(); // Access the MUI theme
 
-  `,
-  title: css`
-    color: purple;
-    font-weight: 500;
-  `,
-  card: css`
-    max-width: 550px;
-    border-radius: 15px;
-    box-shadow: 0px 20px 30px rgba(38, 57, 77, 0.5);
-  `,
-}
+  const styles = {
+    card: css`
+      max-width: 550px;
+      border-radius: 15px;
+      box-shadow: 0px 20px 30px rgba(38, 57, 77, 0.5);
+      background-color: ${theme.palette.background.paper}; /* Theme-based background */
+      transition: 0.3s;
+    `,
+    title: css`
+      color: ${theme.palette.primary.main}; /* Use primary color from the theme */
+      font-weight: 500;
+    `,
+  };
 
-const TutorialCard = props => {
-  const styles = useStyles
-
-  const embedlink = props.embedlink // Assuming embedlink is directly usable
+  const embedlink = props.embedlink;
 
   return (
     <Card css={styles.card}>
@@ -51,16 +34,14 @@ const TutorialCard = props => {
           component="iframe"
           title={props.title}
           height={250}
-          image={embedlink}
-          controls
+          src={embedlink}
+          allowFullScreen
+        />
+        <CardContent
+          style={{
+            color: theme.palette.text.primary, // Use theme-based text color
+          }}
         >
-          <iframe
-            src={embedlink}
-            title={props.title}
-            allowFullScreen
-          ></iframe>
-        </CardMedia>
-        <CardContent style={{ color: "violet" }}>
           <Grid
             container
             direction="column"
@@ -68,17 +49,16 @@ const TutorialCard = props => {
             alignItems="center"
           >
             <Grid item>
-              <Typography
-                gutterBottom
-                variant="h3"
-                css={styles.title}
-                component="h2"
-              >
+              <Typography gutterBottom variant="h3" css={styles.title}>
                 {props.title}
               </Typography>
             </Grid>
             <Grid item>
-              <Typography variant="h4" color="textSecondary" component="p">
+              <Typography
+                variant="h4"
+                color="textSecondary"
+                component="p"
+              >
                 {props.category}
               </Typography>
             </Grid>
@@ -86,8 +66,8 @@ const TutorialCard = props => {
         </CardContent>
       </CardActionArea>
     </Card>
-  )
-}
+  );
+};
 
 export default TutorialCard;
-export { TutorialCard}
+export { TutorialCard };

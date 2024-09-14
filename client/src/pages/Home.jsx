@@ -9,16 +9,14 @@ import Frame3 from "../components/all/landing/Frame3"
 import Frame4 from "../components/all/landing/Frame4"
 import Frame5 from "../components/all/landing/Frame5"
 import Frame6 from "../components/all/landing/Frame6"
-import { chosenTheme } from "../theme";
 
 export default function Home() {
   return (
     <Layout>
-      <div theme={chosenTheme}>
-        <Frame1 theme={chosenTheme} />
-        <Frame2 theme={chosenTheme} />
-        <Frame3 theme={chosenTheme} />
-        <Frame4 theme={chosenTheme} />
+        <Frame1  />
+        <Frame2  />
+        <Frame3  />
+        <Frame4  />
         <Grid container style={{ margin: "30px auto" }}>
           <Grid item md={8}>
             <Frame5 />
@@ -27,8 +25,6 @@ export default function Home() {
             <Frame6 />
           </Grid>
         </Grid>
-      </div>
-      {/* <KommunicateChat /> */}
     </Layout>
   )
 }

@@ -5,15 +5,12 @@ import Question from "../components/query/Question"
 import axiosFetch from "../utils/axiosFetch"
 import PostQuestion from "../components/query/PostQuestion"
 import Grid from "@mui/material/Grid"
-import { ThemeProvider } from "styled-components"
 import { makeStyles } from "@mui/styles"
 import SearchQuestion from "../components/query/SearchQuestion"
 
 import { usePromiseTracker } from "react-promise-tracker"
 import { trackPromise } from "react-promise-tracker"
 import * as Loader from "react-loader-spinner"
-import KommunicateChat from "../chat"
-import { chosenTheme } from "../theme"
 const LoadingIndicator = props => {
   const { promiseInProgress } = usePromiseTracker()
   return (
@@ -65,7 +62,6 @@ export default function AskQuery() {
   }, [reload])
   return (
     <Layout>
-      <ThemeProvider theme={chosenTheme}>
         <center>
           <Typography className={classes.title} align="center" variant="h1">
             Query Section
@@ -78,14 +74,14 @@ export default function AskQuery() {
               <Grid item xs={12} md={7}>
                 <PostQuestion
                   data-aos="zoom-in"
-                  theme={chosenTheme}
+                  
                   reload={reload}
                   setReload={setReload}
                 />
                 <SearchQuestion
                   search={search}
                   setSearch={setSearch}
-                  theme={chosenTheme}
+                  
                   reload={reload}
                   setReload={setReload}
                 />
@@ -113,7 +109,7 @@ export default function AskQuery() {
                         data={data}
                         reload={reload}
                         setReload={setReload}
-                        theme={chosenTheme}
+                        
                       />
                     </div>
                   ))
@@ -128,13 +124,13 @@ export default function AskQuery() {
                   data-aos="zoom-in"
                   search={search}
                   setSearch={setSearch}
-                  theme={chosenTheme}
+                  
                   reload={reload}
                   setReload={setReload}
                 />
                 <PostQuestion
                   data-aos="zoom-in"
-                  theme={chosenTheme}
+                  
                   reload={reload}
                   setReload={setReload}
                 />
@@ -142,10 +138,8 @@ export default function AskQuery() {
             </Hidden>
           </Grid>
         </Container>
-      </ThemeProvider>
       <br />
       <br />
-      {/* <KommunicateChat /> */}
     </Layout>
   )
 }
