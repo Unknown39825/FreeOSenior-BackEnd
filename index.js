@@ -19,7 +19,6 @@ const queryRoutes = require('./routes/AskQuery/askquery');
 //DB Connection
 mongoose
   .connect(process.env.DATABASE, {
-    useUnifiedTopology: true,
   })
   .then(() => {
     console.log("DB CONNECTED");

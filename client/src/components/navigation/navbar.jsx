@@ -94,8 +94,8 @@ const Navbar = () => {
               <Grid
                 container
                 spacing={1}
-                direction="row"
-                justify="space-between"
+                flexDirection="row"
+                justifyContent="space-between"
                 alignItems="center"
                 alignContent="center"
               >

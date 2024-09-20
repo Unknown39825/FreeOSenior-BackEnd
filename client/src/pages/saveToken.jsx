@@ -1,12 +1,14 @@
 import React, { useState } from "react"
-
-import { useQueryParam, StringParam } from "use-query-params"
+import { useLocation } from "react-router-dom"
 
 export default function Savetoken(props) {
   const [created, setCreated] = useState(false)
-  const [JWT] = useQueryParam("JWT", StringParam)
-  const [admin] = useQueryParam("admin", StringParam)
-  const [userId] = useQueryParam("userId", StringParam)
+  const location  = useLocation();
+  const query = new URLSearchParams(location.search)
+  const JWT = query.get("JWT")
+  const admin = query.get("admin")
+  const userId = query.get("userId")
+  
   const jwt = { token: JWT, admin: admin === "true", userId: userId }
 
   if (typeof window !== "undefined") {

@@ -103,10 +103,10 @@ const Footer = () => {
             </Typography>
             <Typography style={{ fontSize: 15, fontFamily: "'Arvo', serif" }}>
               <a
-                href="https://freeosenior.netlify.app/"
+                href="https://freeosenior.unknown39825.live"
                 style={{ color: "white", textDecoration: "none" }}
               >
-                © freeosenior.netify.app
+                © freeosenior.unknown39825.live
               </a>
             </Typography>
             <Typography style={{ fontSize: 15, fontFamily: "'Arvo', serif" }}>
@@ -188,7 +188,7 @@ const Footer = () => {
               style={{ fontSize: 15 }}
               className={classes.centerMobile}
             >
-              © 2021 freeosenior.netify.app
+              © {new Date().getFullYear()} freeosenior.unknown39825.live
             </Typography>
             <Typography
               style={{ fontSize: 15 }}

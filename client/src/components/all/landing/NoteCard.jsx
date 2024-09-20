@@ -5,7 +5,8 @@ import Card from "@mui/material/Card"
 import CardMedia from "@mui/material/CardMedia"
 import CardContent from "@mui/material/CardContent"
 import Button from "@mui/material/Button"
-import Typography from "@mui/material/Typography"
+import Typography from "@mui/material/Typography";
+import pngImage from "../../../assets/basproj.png"
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   root: {
@@ -45,7 +46,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     height: "auto",
     paddingBottom: "48%",
     borderRadius: spacing(2),
-    backgroundColor: "#ffffff",
+    backgroundImage: `url(${pngImage}) !important` ,
     position: "relative",
     [breakpoints.up("md")]: {
       marginLeft: spacing(-3),

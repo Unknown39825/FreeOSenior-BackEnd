@@ -8,10 +8,7 @@ import { useThemeContext } from "../styles/ThemeWrapper";
 const useStyles = makeStyles((theme) => ({
   icon: {
     fontSize: "1.5rem",
-    color:
-      theme.palette.mode === "light"
-        ? theme.palette.primary.main
-        : theme.palette.primary.contrastText,
+    
     paddingRight: theme.spacing(1),
   },
   buttonWrapper: {
@@ -20,11 +17,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center",
     padding: theme.spacing(1),
-    backgroundColor: theme.palette.background.paper,
-    color:
-      theme.palette.mode === "light"
-        ? theme.palette.text.primary
-        : theme.palette.primary.contrastText,
   },
 }));
 

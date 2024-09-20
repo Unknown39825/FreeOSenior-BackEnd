@@ -12,6 +12,8 @@ import Tutorials from './pages/tutorials'
 
 import AskQuery from './pages/askAQuery'
 import ErrorPage from './pages/404'
+import Savetoken from './pages/saveToken'
+import { QueryParamProvider } from 'use-query-params'
 function App() {
   const AuthWrapper = ({ children }) => {
     const dispatch = useDispatch()
@@ -21,7 +23,8 @@ function App() {
 
   return (
     <>
-    <ThemeProviderWrapper>
+    <QueryParamProvider>    
+      <ThemeProviderWrapper>
       <Provider store={store}>
           <BrowserRouter>
             <AuthWrapper>
@@ -31,6 +34,7 @@ function App() {
                 <Route path="/projectNotes" element={<ProjectNotes />} /> 
                  <Route path="/tutorials" element={<Tutorials />} />
                 <Route path="/askAQuery" element={<AskQuery />} />
+                <Route path="/saveToken" element={<Savetoken/>}/>
                  <Route path="*" element={<ErrorPage/>} /> 
 
               </Routes>
@@ -38,6 +42,8 @@ function App() {
           </BrowserRouter>
       </Provider>
       </ThemeProviderWrapper>
+      </QueryParamProvider>
+
     </>
   )
 }

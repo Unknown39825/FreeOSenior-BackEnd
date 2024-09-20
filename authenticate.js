@@ -32,7 +32,7 @@ exports.googlePassport = passport.use(
   new GoogleStrategy(
     {
       // options for strategy
-      callbackURL: `/user/auth/google/callback/`,
+      callbackURL: process.env.FRONTEND + `/user/auth/google/callback`,
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
     },

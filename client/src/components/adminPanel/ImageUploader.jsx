@@ -52,7 +52,7 @@ const ImageUploader = () => {
       data.append("upload_preset", "unknown39825");
 
       const res = await fetch(
-        "https://api.cloudinary.com/v1_1/dvhrzmkwd/image/upload",
+        "https://api.cloudinary.com/v1_1/dd0tebi6a/image/upload",
         {
           method: "POST",
           body: data,

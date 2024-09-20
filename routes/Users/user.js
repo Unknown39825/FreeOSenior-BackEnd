@@ -22,7 +22,7 @@ router.post("/login",(req,res,next) => {
 // concent screen
 router.get("/auth/google", googleAuthentication);
 // router.get("/auth/google/callback",googgleRedirect);
-router.get("/auth/google/callback", passport.authenticate("google"), gauth);
+router.get("/auth/google/callback", passport.authenticate("google",{session:false}), gauth);
 
 router.get("/logout",verifyUser,logoutUser);
 router.get("/logoutall",verifyUser,logoutUserAll);
