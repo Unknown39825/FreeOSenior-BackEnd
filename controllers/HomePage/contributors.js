@@ -52,14 +52,11 @@ exports.createContributor =async (userId,cnt)=>{
 // fetch all contributors
 exports.getContributors = (req,res)=>{
 
-    Contributor.find().populate("user","firstname").exec((err,data)=>{
-        if(err)
-        {
-            return res.status(401).json({error:err});
-
-        }
-        return res.status(200).json(data);
-    })
+   Contributor.find().populate("user","firstname").then(data => {
+    return res.status(200).json(data);
+}).catch(err => {
+    return res.status(401).json({error:err});
+})
 
 };
 

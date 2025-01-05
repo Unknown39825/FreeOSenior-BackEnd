@@ -250,37 +250,35 @@ exports.gauth = async (req, res) => {
     googleId: req.user.id,
   };
 
-  User.findOne({ email: user.email }).exec(async (err, data) => {
-    try {
-      if (err) {
-        console.log("error");
-        return res.status(400).json({ error: err });
-      }
-
-      if (!data) {
-        console.log("user not found");
-        const newuser = new User(user);
-        newuser.isVerified = true;
-        req.user = newuser;
-      } else {
-        req.user = data;
-        req.user.isVerified = true;
-      }
-
-      await req.user.save();
-      var token = await req.user.generateAuthToken();
-      var admin = req.user.admin;
-
-      var userId = req.user._id;
-
-      const redirectURL = `${process.env.FRONTEND}/saveToken?JWT=${token}&admin=${admin}&userId=${userId}`;
-      res.redirect(redirectURL);
-    } catch (error) {
-      console.log(error);
-      if (error) res.status(400).json({ error: error });
-      return;
+ User.findOne({ email: user.email }).then(async (data) => {
+  try {
+    if (!data) {
+      console.log("user not found");
+      const newuser = new User(user);
+      newuser.isVerified = true;
+      req.user = newuser;
+    } else {
+      req.user = data;
+      req.user.isVerified = true;
     }
-  });
+
+    await req.user.save();
+    var token = await req.user.generateAuthToken();
+    var admin = req.user.admin;
+
+    var userId = req.user._id;
+
+    const redirectURL = `${process.env.FRONTEND}/saveToken?JWT=${token}&admin=${admin}&userId=${userId}`;
+    res.redirect(redirectURL);
+  } catch (error) {
+    console.log(error);
+    if (error) res.status(400).json({ error: error });
+    return;
+  }
+}).catch((err) => {
+  console.log("error");
+  return res.status(400).json({ error: err });
+});
 };
 
 // exports.googleLogin = async (req, res) => {          //TODO
