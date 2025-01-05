@@ -3,13 +3,10 @@ const User = require("../../models/User/user");
 
 // create a contributor
 exports.createContributor =async (userId,cnt)=>{
-    
     try {
         const contributor = await Contributor.findOne({ user: userId });
         
-        if(contributor)
-        {
-
+        if(contributor) {
            await contributor.update({
                 $inc:{
                     count:cnt
@@ -17,24 +14,17 @@ exports.createContributor =async (userId,cnt)=>{
             });
             await contributor.save();
             console.log("contributor updated");
-            
-        }
-        else
-        {
-
+        } else {
             const contributor = new Contributor({
                 user:userId,
                 count:cnt
             });
             await contributor.save();
             console.log("new contributor added");
-            
         }
-        
     } catch (error) {
         console.log("error");
         console.log(error);
-        
     }
 
     // const contributor= new Contributor(req.body);
@@ -46,18 +36,16 @@ exports.createContributor =async (userId,cnt)=>{
     //     })
     //     res.json(data);
     // });
-    
 };
 
 // fetch all contributors
-exports.getContributors = (req,res)=>{
-
-   Contributor.find().populate("user","firstname").then(data => {
+exports.getContributors = async (req, res) => {
+  try {
+    const data = await Contributor.find().populate("user", "firstname");
     return res.status(200).json(data);
-}).catch(err => {
-    return res.status(401).json({error:err});
-})
-
+  } catch (err) {
+    return res.status(401).json({ error: err });
+  }
 };
 
 // delete contributor
