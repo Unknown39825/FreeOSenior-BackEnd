@@ -9,6 +9,7 @@ let token = JSON.parse(access_token)?.token
 console.log(token)
 const axiosFetch = axios.default.create({
   baseURL: "/",
+  withCredentials: true,
   headers: {
     Authorization: `Bearer ${token}`,
   },

@@ -304,6 +304,19 @@ const SignIn = ({
       >
         SIGN IN
       </Button>
+      
+      <Button
+        fullWidth
+        style={{marginTop:'10px'}}
+        variant="contained"
+        onClick={(e)=>{
+          e.preventDefault();
+          window.location = "https://auth.unknown39825.live?redirect_url=https://finearts.unknown39825.live?sso=true"
+        }}
+        className={classes.submitbutton}
+      >
+        SIGN IN SSO
+      </Button>
     </div>
   )
 }

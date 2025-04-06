@@ -1,33 +1,45 @@
 require("dotenv").config();
-var passport = require('passport');
-var JwtStrategy = require('passport-jwt').Strategy;
-var ExtractJwt = require('passport-jwt').ExtractJwt;
-const User = require('./models/User/user');
+var passport = require("passport");
+var JwtStrategy = require("passport-jwt").Strategy;
+var ExtractJwt = require("passport-jwt").ExtractJwt;
+const User = require("./models/User/user");
 const GoogleStrategy = require("passport-google-oauth20");
 const jwt = require("jsonwebtoken");
 
-var opts = {
-  jwtFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),// toe get token from the auth header
-  secretOrKey : process.env.secretKey,// secret key
-  passReqToCallback:true//to pass req to the callback
+const getTokenFromRequest = (req, sso=false) => {
+  // 1. Check cookie
+  if (req && sso=='true' && req.cookies && req.cookies.UNKNOWN39825_AUTH) {
+    console.log(req.cookies);
+    return req.cookies.UNKNOWN39825_AUTH;
+  }
+
+  // 2. Fallback to header
+  return ExtractJwt.fromAuthHeaderAsBearerToken()(req);
 };
 
-exports.jwtPassport = passport.use(new JwtStrategy(opts, async (req,jwt_payload,done) => {
-    User.findOne(
-      { _id: jwt_payload._id, "tokens.token": opts.jwtFromRequest(req)},
-      (err, user) => {
-        if (err) {
-          return done(err, false);
-        } else if (user) {
-          req.token=opts.jwtFromRequest(req);
-          return done(null, user);
-        } else {
-          return done(null, false);
-        }
-      }
-    );
-}));
+const opts = {
+  jwtFromRequest: getTokenFromRequest,
+  secretOrKey: process.env.secretKey,
+  passReqToCallback: true,
+};
 
+exports.jwtPassport = passport.use(
+  new JwtStrategy(opts, async (req, jwt_payload, done) => {
+    User.findOne({ _id: jwt_payload._id, "tokens.token": opts.jwtFromRequest(req) })
+      .then((user) => {
+        if (!user) {
+          return done(null, false);
+        } else {
+          req.token = opts.jwtFromRequest(req);
+          return done(null, user);
+        }
+      })
+      .catch((err) => {
+        return done(err, false);
+      });
+  })
+);
+  
 exports.googlePassport = passport.use(
   new GoogleStrategy(
     {
@@ -59,68 +71,101 @@ exports.googleAuthentication = passport.authenticate("google", {
 });
 
 // redirectd call
-exports.googgleRedirect = (passport.authenticate('google'),(req,res)=>{
-  console.log("redirected", req.user);
-  let user = {
-    displayName: req.user.displayName,
-    name: req.user.name.givenName,
-    email: req.user._json.email,
-    provider: req.user.provider,
-  };
-  console.log(user);
-  // res.json(user);
-})
+exports.googgleRedirect =
+  (passport.authenticate("google"),
+  (req, res) => {
+    console.log("redirected", req.user);
+    let user = {
+      displayName: req.user.displayName,
+      name: req.user.name.givenName,
+      email: req.user._json.email,
+      provider: req.user.provider,
+    };
+    console.log(user);
+    // res.json(user);
+  });
 
 exports.verifyUser = passport.authenticate("jwt", { session: false });
 
 exports.verifyAdmin = (req, res, next) => {
-    User.findOne({_id: req.user._id})
-    .then((user) => {
+  User.findOne({ _id: req.user._id })
+    .then(
+      (user) => {
         if (user.admin) {
-            next();              //move ahead only if user is admin
+          next(); //move ahead only if user is admin
         } else {
-            res.status(403).json({error : "Admin access required !!"});
-            return next(res);
-        } 
-    }, (err) => next(err))
-    .catch((err) => next(err))
-}
+          res.status(403).json({ error: "Admin access required !!" });
+          return next(res);
+        }
+      },
+      (err) => next(err)
+    )
+    .catch((err) => next(err));
+};
 
-exports.isVerifiedUser = (req,res,next) => {
-      User.findOne({email: req.body.email})
-      .then((user) => {
+exports.isVerifiedUser = (req, res, next) => {
+  User.findOne({ email: req.body.email })
+    .then(
+      (user) => {
         if (!user) {
-              res.status(400).json({error:"The given Email does not exists"});
-              return next(res);     
-        } else if(user.isVerified) {
+          res.status(400).json({ error: "The given Email does not exists" });
+          return next(res);
+        } else if (user.isVerified) {
           next();
         } else {
-            res.status(403).json({error : "Your account has not been verified !!"});
-            return next(res);
-        } 
-    }, (err) => next(err))
+          res
+            .status(403)
+            .json({ error: "Your account has not been verified !!" });
+          return next(res);
+        }
+      },
+      (err) => next(err)
+    )
     .catch((err) => {
-       res.status(400).json({error:err});
-       return next(res);
-    }) 
-}
+      res.status(400).json({ error: err });
+      return next(res);
+    });
+};
 
-exports.verifyToken = (req,res) => {
-  if(!opts.jwtFromRequest(req)) {
-     return res.status(404).json({success: false, error: 'Token Missing !!'});
+exports.verifyToken = (req, res) => {
+  const sso = req.query.sso || false;
+  console.log(sso)
+  if (!opts.jwtFromRequest(req,sso)) {
+    return res.status(404).json({ success: false, error: "Token Missing !!" });
+  } else {
+    jwt.verify(
+      opts.jwtFromRequest(req,sso),
+      process.env.secretKey,
+      (err, decoded) => {
+        if (err) {
+          return res
+            .status(401)
+            .json({ success: false, error: err.message, status: err.name });
+        }
+
+        if (!decoded) {
+          return res
+            .status(500)
+            .json({ success: false, error: "Something went wrong" });
+        }
+
+        User.findOne({
+          email: decoded.email || decoded.sub,
+        })
+          .then(async (user) => {
+            const token = await user.generateAuthToken()
+            return res.json({
+              status: "success",
+              msg: "You are successfully logged In !!",
+              token: token,
+              admin: user?.admin,
+              userId: user._id,
+            });
+          })
+          .catch((err) => {
+            throw new Error("Error finding user: " + err.message);
+          });
+      }
+    );
   }
-  
-  else {
-    jwt.verify(opts.jwtFromRequest(req),process.env.secretKey,(err,decoded) => {
-      if(err) {
-        return res.status(401).json({success: false, error: err.message , status: err.name});
-      }
-
-      if(!decoded) {
-        return res.status(500).json({success: false, error: 'Something went wrong'});
-      }
-
-      return res.status(200).json({success: true, status: 'Token Valid !!',user: decoded._id});
-    })
-  } 
-}
+};
